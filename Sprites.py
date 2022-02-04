@@ -21,12 +21,13 @@ class Pawn(Piece):
     def __init__(self, game, color, x, y):
         super().__init__(game, color, x, y)
         self.name = "P"
+
         if (color == "WHITE"):
             self.image = game.img_pawn_w
             self.value = 10
         if (color == "BLACK"):
             self.image = game.img_pawn_b
-            self. value = -10
+            self.value = -10
 
     def is_comible(self, sprite):
         tablero = self.game.chess_position_dict[self.game.turn - 1][0]
@@ -38,6 +39,9 @@ class Pawn(Piece):
         return False
 
     def get_valid_moves(self, x, y):
+        if self.image == self.game.img_queen_w or self.image == self.game.img_queen_b:
+            return Queen.get_valid_moves(self, x, y)
+
         self.valid_moves = list()
         if (self.color == "WHITE"):
             if (y - 1 >= 0 and self.game.tablero[x][y - 1] == ""):

@@ -13,7 +13,7 @@ TILE_SIZE = WIDTH / 8
 
 """
 TO-DO
-jaque mate
+hay que arreglar el coronamiento
 
 """
 
@@ -61,6 +61,7 @@ class Game():
         self.turn = 1
         self.click = False
         self.curr_sprite = None   
+        self.coronado = [False, None, None]
         
         self.bot = Random_bot(self)
         self.minimax_bot = Minimax_bot(self, "BLACK")
@@ -198,6 +199,20 @@ class Game():
                 if self.pieces[i].castling_turn is not None:
                     if self.pieces[i].castling_turn + 1 == self.turn:
                         self.pieces[i].castling_turn = None
+
+            # Retroceder el coronamiento
+            if self.coronado[0]:
+                if self.pieces[i] == self.coronado[1] and self.turn == self.coronado[2]:
+                    self.coronado[0] = False
+                    if self.pieces[i].color == "WHITE":
+                        self.pieces[i].image = self.img_pawn_w
+                        self.pieces[i].value = 10
+                    elif self.pieces[i].color == "BLACK":
+                        self.pieces[i].image = self.img_pawn_b
+                        self.pieces[i].value = -10
+
+                    self.pieces[i].name == "P"
+                    self.tablero[int(self.pieces[i].x)][int(self.pieces[i].y)] = "P"
             
     def run(self):
         # Ejecuta el juego.
@@ -359,12 +374,15 @@ class Game():
         # Coronar peón
         if curr_sprite.image == self.img_pawn_w and pos_y == 0 or curr_sprite.image == self.img_pawn_b and pos_y == 7:
             if curr_sprite.color == "WHITE":
-                self.pieces.insert(self.pieces.index(curr_sprite), Queen(self, "WHITE", pos_x, pos_y))
-            else:
-                self.pieces.insert(self.pieces.index(curr_sprite), Queen(self, "BLACK", pos_x, pos_y))
-
+                curr_sprite.image = self.img_queen_w
+                curr_sprite.value = 90
+            if curr_sprite.color == "BLACK":
+                curr_sprite.image = self.img_queen_b
+                curr_sprite.value = -90
+            curr_sprite.name = "Q"
             self.tablero[int(pos_x)][int(pos_y)] = "Q"
-            self.pieces.remove(curr_sprite)
+            self.coronado = [True, curr_sprite, self.turn + 1]
+            
         self.curr_sprite = None
 
         # Guardar posición del tablero.
@@ -393,7 +411,7 @@ class Game():
 
         self.chess_position_dict.setdefault(self.turn + 1, (curr_tablero, positions))
         self.turn += 1
-
+    
     def draw(self):
         # Dibuja en pantalla todo lo que aquí se indique, en este caso, se está
         # dibujando el tablero, las piezas y los posibles movimientos en forma
