@@ -67,22 +67,40 @@ class Game():
         self.minimax_bot = Minimax_bot(self, "BLACK")
         self.IA = IA(self, "WHITE")
 
-        tablero2 = [['Rb', 'Nb', 'Bbw', 'Qb', 'Kb', 'Bbb', 'Nb', 'Rb'],
+        tablero2 = [['Rb', 'Nb', 'Bb', 'Qb', 'Kb', 'Bb', 'Nb', 'Rb'],
                    ['Pb', 'Pb', 'Pb', 'Pb', 'Pb', 'Pb', 'Pb', 'Pb'],
                    ['', '', '', '', '', '', '', ''],
                    ['', '', '', '', '', '', '', ''],
                    ['', '', '', '', '', '', '', ''],
                    ['', '', '', '', '', '', '', ''],
                    ['Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw'],
-                   ['Rw', 'Nw', 'Bwb', 'Qw', 'Kw', 'Bww', 'Nw', 'Rw']]
+                   ['Rw', 'Nw', 'Bw', 'Qw', 'Kw', 'Bw', 'Nw', 'Rw']]
+
+        tablero4 = [['Rb', 'Nb', 'Bb', 'Qb', '', 'Kb', '', 'Rb'],
+                   ['Pb', 'Pb', '', 'Pw', 'Bb', 'Pb', 'Pb', 'Pb'],
+                   ['', '', 'Pb', '', '', '', '', ''],
+                   ['', '', '', '', '', '', '', ''],
+                   ['', '', 'Bw', '', '', '', '', ''],
+                   ['', '', '', '', '', '', '', ''],
+                   ['Pw', 'Pw', 'Pw', '', 'Nw', 'Nb', 'Pw', 'Pw'],
+                   ['Rw', 'Nw', 'Bw', 'Qw', 'Kw', '', '', 'Rw']]
 
         tablero = [['Rb', '', '', '', 'Kb', '', '', 'Rb'],
-                   ['Pb', '', 'Pb', 'Pb', 'Qb', 'Pb', 'Bbb', ''],
-                   ['Bbw', 'Nb', '', '', 'Pb', 'Nb', 'Pb', ''],
+                   ['Pw', 'Pb', 'Pb', 'Pb', '', 'Pb', 'Pb', 'Pb'],
+                   ['', 'Bb', '', '', '', 'Nb', 'Bb', 'Nw'],
+                   ['Nb', 'Pw', '', '', '', '', '', ''],
+                   ['Bw', 'Bw', 'Pw', '', 'Pw', '', '', ''],
+                   ['Qb', '', '', '', '', 'Nw', '', ''],
+                   ['Pw', 'Pb', '', 'Pw', '', '', 'Pw', 'Pw'],
+                   ['Rw', '', '', 'Qw', '', 'Rw', 'Kw', '']]
+
+        tablero5 = [['Rb', '', '', '', 'Kb', '', '', 'Rb'],
+                   ['Pb', '', 'Pb', 'Pb', 'Qb', 'Pb', 'Bb', ''],
+                   ['Bb', 'Nb', '', '', 'Pb', 'Nb', 'Pb', ''],
                    ['', '', '', 'Pw', 'Nw', '', '', ''],
                    ['', 'Pb', '', '', 'Pw', '', '', ''],
                    ['', '', 'Nw', '', '', 'Qw', '', 'Pb'],
-                   ['Pw', 'Pw', 'Pw', 'Bwb', 'Bww', 'Pw', 'Pw', 'Pw'],
+                   ['Pw', 'Pw', 'Pw', 'Bw', 'Bw', 'Pw', 'Pw', 'Pw'],
                    ['Rw', '', '', '', 'Kw', '', '', 'Rw']]
 
         tablero3 = [['', '', '', '', '', '', '', ''],
@@ -95,7 +113,7 @@ class Game():
                    ['', '', '', '', '', '', '', '']]
     
         self.create_tablero(tablero)
-
+        
         positions = []
         for p in self.pieces:
             positions.append((p.x, p.y))
@@ -119,11 +137,8 @@ class Game():
                 elif tablero[j][i] == "Nb":
                     self.pieces.append(Knight(self, "BLACK", i, j))
                     self.tablero[i][j] = "N"
-                elif tablero[j][i] == "Bbw":
-                    self.pieces.append(Bishop(self, "BLACK", i, j, "WHITE"))
-                    self.tablero[i][j] = "B"
-                elif tablero[j][i] == "Bbb":
-                    self.pieces.append(Bishop(self, "BLACK", i, j, "BLACK"))
+                elif tablero[j][i] == "Bb":
+                    self.pieces.append(Bishop(self, "BLACK", i, j))
                     self.tablero[i][j] = "B"
                 elif tablero[j][i] == "Qb":
                     self.pieces.append(Queen(self, "BLACK", i, j))
@@ -141,11 +156,8 @@ class Game():
                 elif tablero[j][i] == "Nw":
                     self.pieces.append(Knight(self, "WHITE", i, j))
                     self.tablero[i][j] = "N"
-                elif tablero[j][i] == "Bwb":
-                    self.pieces.append(Bishop(self, "WHITE", i, j, "BLACK"))
-                    self.tablero[i][j] = "B"
-                elif tablero[j][i] == "Bww":
-                    self.pieces.append(Bishop(self, "WHITE", i, j, "WHITE"))
+                elif tablero[j][i] == "Bw":
+                    self.pieces.append(Bishop(self, "WHITE", i, j))
                     self.tablero[i][j] = "B"
                 elif tablero[j][i] == "Qw":
                     self.pieces.append(Queen(self, "WHITE", i, j))
@@ -167,9 +179,7 @@ class Game():
                     self.tablero[i][j] = "R"
                 elif tablero[j][i] == "Nb":
                     self.tablero[i][j] = "N"
-                elif tablero[j][i] == "Bbw":
-                    self.tablero[i][j] = "B"
-                elif tablero[j][i] == "Bbb":
+                elif tablero[j][i] == "Bb":
                     self.tablero[i][j] = "B"
                 elif tablero[j][i] == "Qb":
                     self.tablero[i][j] = "Q"
@@ -182,9 +192,7 @@ class Game():
                     self.tablero[i][j] = "R"
                 elif tablero[j][i] == "Nw":
                     self.tablero[i][j] = "N"
-                elif tablero[j][i] == "Bwb":
-                    self.tablero[i][j] = "B"
-                elif tablero[j][i] == "Bww":
+                elif tablero[j][i] == "Bw":
                     self.tablero[i][j] = "B"
                 elif tablero[j][i] == "Qw":
                     self.tablero[i][j] = "Q"
@@ -195,7 +203,7 @@ class Game():
             self.pieces[i].set_pos(positions[i][0], positions[i][1])
             if positions[i][0] != -10:
                 self.pieces[i].alive = True
-            if i == 14 or i == 20:
+            if i == 17 or i == 26:
                 if self.pieces[i].castling_turn is not None:
                     if self.pieces[i].castling_turn + 1 == self.turn:
                         self.pieces[i].castling_turn = None
@@ -211,6 +219,7 @@ class Game():
                         self.pieces[i].image = self.img_pawn_b
                         self.pieces[i].value = -10
 
+                    self.pieces[i].promoted = [False, None]
                     self.pieces[i].name == "P"
                     self.tablero[int(self.pieces[i].x)][int(self.pieces[i].y)] = "P"
             
@@ -262,11 +271,12 @@ class Game():
                     pos = pygame.mouse.get_pos()
                     self.curr_sprite.set_pos((pos[0] - 65 / 2) / TILE_SIZE, (pos[1] - 65 / 2) / TILE_SIZE)
             if event.type == pygame.MOUSEBUTTONDOWN:            
-                #self.down()
+                self.down()
                 pass
             if event.type == pygame.MOUSEBUTTONUP:
-                #self.up()
-                print(self.IA.generate_move(2))
+                self.up()
+                #print(self.IA.generate_move(1))
+                #print(self.IA.generate_move(2))
 
                 self.valid_moves.clear()
                 self.check_tablero()
@@ -299,6 +309,26 @@ class Game():
         elif self.curr_sprite is not None:
             self.curr_sprite.set_pos(self.curr_pos_x, self.curr_pos_y)
 
+    def draw(self):
+        # Dibuja en pantalla todo lo que aquí se indique, en este caso, se está
+        # dibujando el tablero, las piezas y los posibles movimientos en forma
+        # de círculo.
+
+        self.draw_tablero()
+
+        for sprite in self.pieces:
+            if sprite != self.curr_sprite and sprite.alive:
+                self.screen.blit(sprite.image, (sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
+        for ele in self.valid_moves:
+            pygame.draw.circle(self.screen, (132, 255, 96), (ele[0] * TILE_SIZE + TILE_SIZE / 2, ele[1] * TILE_SIZE + TILE_SIZE / 2), 15, 0)
+
+        if self.curr_sprite is not None:
+            self.screen.blit(self.curr_sprite.image, (self.curr_sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.curr_sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
+
+        #time.sleep(0.5)
+
+        pygame.display.flip()
+
     def backtrack(self):
         if self.turn == 1:
             return
@@ -320,7 +350,7 @@ class Game():
             print(tablero[i])
         print()
 
-    def generate_move(self, curr_sprite, pos_x, pos_y):
+    def generate_move(self, curr_sprite, pos_x, pos_y, promote=0):
         # Genera el movimiento de la pieza dada como parámetro
 
         if self.tablero[int(pos_x)][int(pos_y)] == "K":
@@ -331,11 +361,11 @@ class Game():
                 sprite.set_pos(-10, -10)
                 sprite.alive = False
             # Comer al paso
-            elif curr_sprite.image == self.img_pawn_w and sprite.image == self.img_pawn_b and sprite.y - 1 == pos_y and sprite.x == pos_x:
+            elif curr_sprite.image == self.img_pawn_w and sprite.image == self.img_pawn_b and sprite.y - 1 == pos_y and sprite.x == pos_x and sprite.y == 3:
                     self.tablero[int(sprite.x)][int(sprite.y)] = ""
                     sprite.set_pos(-10, -10)
                     sprite.alive = False
-            elif curr_sprite.image == self.img_pawn_b and sprite.image == self.img_pawn_w and sprite.y + 1 == pos_y and sprite.x == pos_x:
+            elif curr_sprite.image == self.img_pawn_b and sprite.image == self.img_pawn_w and sprite.y + 1 == pos_y and sprite.x == pos_x and sprite.y == 4:
                     self.tablero[int(sprite.x)][int(sprite.y)] = ""
                     sprite.set_pos(-10, -10)
                     sprite.alive = False
@@ -352,36 +382,52 @@ class Game():
                         self.pieces[-1].set_pos(5, 7)
                         self.tablero[7][7] = ""
                         self.tablero[5][7] = "R"
-                elif curr_sprite.x == 4 and pos_x == 1:
-                    if self.pieces[4].x == 0 and self.pieces[4].y == 7:
-                        self.pieces[4].set_pos(2, 7)
+                elif curr_sprite.x == 4 and pos_x == 2:
+                    if self.pieces[22].x == 0 and self.pieces[22].y == 7:
+                        self.pieces[4].set_pos(3, 7)
                         self.tablero[0][7] = ""
-                        self.tablero[2][7] = "R"
+                        self.tablero[3][7] = "R"
             elif curr_sprite.image == self.img_king_b:
                 if curr_sprite.x == 4 and pos_x == 6:
                     if self.pieces[-4].x == 7 and self.pieces[-4].y == 0:
                         self.pieces[-4].set_pos(5, 0)
                         self.tablero[7][0] = ""
                         self.tablero[5][0] = "R"
-                elif curr_sprite.x == 4 and pos_x == 1:
+                elif curr_sprite.x == 4 and pos_x == 2:
                     if self.pieces[0].x == 0 and self.pieces[0].y == 0:
-                        self.pieces[0].set_pos(2, 0)
+                        self.pieces[0].set_pos(3, 0)
                         self.tablero[0][0] = ""
-                        self.tablero[2][0] = "R"
+                        self.tablero[3][0] = "R"
 
         curr_sprite.set_pos(pos_x, pos_y) 
 
         # Coronar peón
-        if curr_sprite.image == self.img_pawn_w and pos_y == 0 or curr_sprite.image == self.img_pawn_b and pos_y == 7:
-            if curr_sprite.color == "WHITE":
+        if curr_sprite.image == self.img_pawn_w and pos_y == 0 and not curr_sprite.promoted[0] or curr_sprite.image == self.img_pawn_b and pos_y == 7 and not curr_sprite.promoted[0]:
+            #if curr_sprite.color == "WHITE":
+            #    curr_sprite.image = self.img_queen_w
+            #    curr_sprite.value = 90
+            #if curr_sprite.color == "BLACK":
+            #    curr_sprite.image = self.img_queen_b
+            #    curr_sprite.value = -90
+            if promote == 0:
+                curr_sprite.name = "Q"
                 curr_sprite.image = self.img_queen_w
-                curr_sprite.value = 90
-            if curr_sprite.color == "BLACK":
-                curr_sprite.image = self.img_queen_b
-                curr_sprite.value = -90
-            curr_sprite.name = "Q"
-            self.tablero[int(pos_x)][int(pos_y)] = "Q"
+                self.tablero[int(pos_x)][int(pos_y)] = "Q"
+            if promote == 1:
+                curr_sprite.name = "R"
+                curr_sprite.image = self.img_rook_w
+                self.tablero[int(pos_x)][int(pos_y)] = "R"
+            if promote == 2:
+                curr_sprite.name = "N"
+                curr_sprite.image = self.img_knight_w
+                self.tablero[int(pos_x)][int(pos_y)] = "N"
+            if promote == 3:
+                curr_sprite.name = "B"
+                curr_sprite.image = self.img_bishop_w
+                self.tablero[int(pos_x)][int(pos_y)] = "B"
+
             self.coronado = [True, curr_sprite, self.turn + 1]
+            curr_sprite.promoted = [True, promote]
             
         self.curr_sprite = None
 
@@ -392,16 +438,8 @@ class Game():
                 continue
             elif sprite.color == "WHITE":
                 str = "w"
-                if sprite.name == "B" and sprite.diagonal_color == "WHITE":
-                    str += "w"
-                elif sprite.name == "B" and sprite.diagonal_color == "BLACK":
-                    str += "b"
             else:
                 str = "b"
-                if sprite.name == "B" and sprite.diagonal_color == "WHITE":
-                    str += "w"
-                elif sprite.name == "B" and sprite.diagonal_color == "BLACK":
-                    str += "b"
 
             curr_tablero[int(sprite.y)][int(sprite.x)] = sprite.name + str
         
@@ -411,24 +449,6 @@ class Game():
 
         self.chess_position_dict.setdefault(self.turn + 1, (curr_tablero, positions))
         self.turn += 1
-    
-    def draw(self):
-        # Dibuja en pantalla todo lo que aquí se indique, en este caso, se está
-        # dibujando el tablero, las piezas y los posibles movimientos en forma
-        # de círculo.
-
-        self.draw_tablero()
-
-        for sprite in self.pieces:
-            if sprite != self.curr_sprite and sprite.alive:
-                self.screen.blit(sprite.image, (sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
-        for ele in self.valid_moves:
-            pygame.draw.circle(self.screen, (132, 255, 96), (ele[0] * TILE_SIZE + TILE_SIZE / 2, ele[1] * TILE_SIZE + TILE_SIZE / 2), 15, 0)
-
-        if self.curr_sprite is not None:
-            self.screen.blit(self.curr_sprite.image, (self.curr_sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.curr_sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
-
-        pygame.display.flip()
 
     def draw_tablero(self):
         # Dibuja un tablero de 8x8 donde cada casilla es de tamaño TILE_SIZE*TILE_SIZE.
@@ -478,7 +498,7 @@ class Game():
 
         pieces_left = len(self.pieces)
 
-        if pieces_left == 2:
+        """if pieces_left == 2:
             print("Tablas")
             self.playing = False
         elif pieces_left == 3:
@@ -511,7 +531,7 @@ class Game():
             if c1 and c2:
                 if b_white.diagonal_color == b_black.diagonal_color:
                     print("Tablas")
-                    self.playing = False
+                    self.playing = False"""
 
         if self.is_check():
             print("check")
@@ -530,15 +550,17 @@ class Game():
 
         #16 - 19 tablero normal
         # 14 - 20
+        # 19 - 18
+        # 17 - 26
         #-1 - 0 tab
         self.check = False
         for sprite in self.pieces:
             if sprite.alive and sprite != target:
                 moves = sprite.get_valid_moves(int(sprite.x), int(sprite.y))
-                if (self.pieces[14].x, self.pieces[14].y) in moves and sprite.color == "WHITE":
+                if (self.pieces[17].x, self.pieces[17].y) in moves and sprite.color == "WHITE":
                     self.check = True
                     self.check_color = "WHITE"
-                if (self.pieces[20].x, self.pieces[20].y) in moves and sprite.color == "BLACK":
+                if (self.pieces[26].x, self.pieces[26].y) in moves and sprite.color == "BLACK":
                     self.check = True
                     self.check_color = "BLACK"
 

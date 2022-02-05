@@ -21,6 +21,7 @@ class Pawn(Piece):
     def __init__(self, game, color, x, y):
         super().__init__(game, color, x, y)
         self.name = "P"
+        self.promoted = [False, None]
 
         if (color == "WHITE"):
             self.image = game.img_pawn_w
@@ -31,6 +32,7 @@ class Pawn(Piece):
 
     def is_comible(self, sprite):
         tablero = self.game.chess_position_dict[self.game.turn - 1][0]
+
         if tablero[1][int(sprite.x)] == "Pb" and int(sprite.y) == 3 and tablero[3][int(sprite.x)] != "Pb":
             return True
         if tablero[6][int(sprite.x)] == "Pw" and int(sprite.y) == 4 and tablero[4][int(sprite.x)] != "Pw":
@@ -39,8 +41,15 @@ class Pawn(Piece):
         return False
 
     def get_valid_moves(self, x, y):
-        if self.image == self.game.img_queen_w or self.image == self.game.img_queen_b:
-            return Queen.get_valid_moves(self, x, y)
+        if self.promoted[0]:
+            if self.promoted[1] == 0:
+                return Queen.get_valid_moves(self, x, y)
+            elif self.promoted[1] == 1:
+                return Rook.get_valid_moves(self, x, y)
+            elif self.promoted[1] == 2:
+                return Knight.get_valid_moves(self, x, y)
+            elif self.promoted[1] == 3:
+                return Bishop.get_valid_moves(self, x, y)
 
         self.valid_moves = list()
         if (self.color == "WHITE"):
@@ -91,10 +100,9 @@ class Pawn(Piece):
         return self.game.get_real_valid_moves(self.color, self.valid_moves)
 
 class Bishop(Piece):
-    def __init__(self, game, color, x, y, diagonal_color):
+    def __init__(self, game, color, x, y):
         super().__init__(game, color, x, y)
         self.name = "B"
-        self.diagonal_color = diagonal_color
         if (color == "WHITE"):
             self.image = game.img_bishop_w
             self.value = 30
@@ -259,7 +267,7 @@ class King(Piece):
                 for sprite in self.game.pieces:
                     if sprite.x == 0 and sprite.y == 7 and sprite.image == self.game.img_rook_w:
                         if self.game.tablero[1][7] == "" and self.game.tablero[2][7] == "" and self.game.tablero[3][7] == "":
-                            self.valid_moves.append((1, 7))
+                            self.valid_moves.append((2, 7))
                     if sprite.x == 7 and sprite.y == 7 and sprite.image == self.game.img_rook_w:
                         if self.game.tablero[6][7] == "" and self.game.tablero[5][7] == "":
                             self.valid_moves.append((6, 7))
@@ -267,7 +275,7 @@ class King(Piece):
                 for sprite in self.game.pieces:
                     if sprite.x == 0 and sprite.y == 0 and sprite.image == self.game.img_rook_b:
                         if self.game.tablero[1][0] == "" and self.game.tablero[2][0] == "" and self.game.tablero[3][0] == "":
-                            self.valid_moves.append((1, 0))
+                            self.valid_moves.append((2, 0))
                     if sprite.x == 7 and sprite.y == 0 and sprite.image == self.game.img_rook_b:
                         if self.game.tablero[6][0] == "" and self.game.tablero[5][0] == "":
                             self.valid_moves.append((6, 0))
