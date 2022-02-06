@@ -209,9 +209,8 @@ class Game():
                         self.pieces[i].castling_turn = None
 
             # Retroceder el coronamiento
-            if self.coronado[0]:
-                if self.pieces[i] == self.coronado[1] and self.turn == self.coronado[2]:
-                    self.coronado[0] = False
+            if hasattr(self.pieces[i], "promoted") and self.pieces[i].promoted[0]:
+                if self.turn == self.pieces[i].promoted[2]:
                     if self.pieces[i].color == "WHITE":
                         self.pieces[i].image = self.img_pawn_w
                         self.pieces[i].value = 10
@@ -219,9 +218,14 @@ class Game():
                         self.pieces[i].image = self.img_pawn_b
                         self.pieces[i].value = -10
 
-                    self.pieces[i].promoted = [False, None]
+                    self.pieces[i].promoted = [False, None, None]
                     self.pieces[i].name == "P"
                     self.tablero[int(self.pieces[i].x)][int(self.pieces[i].y)] = "P"
+
+            # Por algún lado se me está cambiando y no sé como arreglarlo
+            if hasattr(self.pieces[i], "promoted") and not self.pieces[i].promoted[0] and self.pieces[i].name != "P":
+                self.pieces[i].name = "P"
+                self.tablero[int(self.pieces[i].x)][int(self.pieces[i].y)] = "P"
             
     def run(self):
         # Ejecuta el juego.
@@ -270,13 +274,13 @@ class Game():
                 if self.click == True and self.curr_sprite is not None and 1 == 2:
                     pos = pygame.mouse.get_pos()
                     self.curr_sprite.set_pos((pos[0] - 65 / 2) / TILE_SIZE, (pos[1] - 65 / 2) / TILE_SIZE)
-            if event.type == pygame.MOUSEBUTTONDOWN:            
-                self.down()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                #self.down()
                 pass
             if event.type == pygame.MOUSEBUTTONUP:
-                self.up()
+                #self.up()
                 #print(self.IA.generate_move(1))
-                #print(self.IA.generate_move(2))
+                print(self.IA.generate_move(3))
 
                 self.valid_moves.clear()
                 self.check_tablero()
@@ -350,7 +354,7 @@ class Game():
             print(tablero[i])
         print()
 
-    def generate_move(self, curr_sprite, pos_x, pos_y, promote=0):
+    def generate_move(self, curr_sprite, pos_x, pos_y, promote=3):
         # Genera el movimiento de la pieza dada como parámetro
 
         if self.tablero[int(pos_x)][int(pos_y)] == "K":
@@ -403,12 +407,6 @@ class Game():
 
         # Coronar peón
         if curr_sprite.image == self.img_pawn_w and pos_y == 0 and not curr_sprite.promoted[0] or curr_sprite.image == self.img_pawn_b and pos_y == 7 and not curr_sprite.promoted[0]:
-            #if curr_sprite.color == "WHITE":
-            #    curr_sprite.image = self.img_queen_w
-            #    curr_sprite.value = 90
-            #if curr_sprite.color == "BLACK":
-            #    curr_sprite.image = self.img_queen_b
-            #    curr_sprite.value = -90
             if promote == 0:
                 curr_sprite.name = "Q"
                 curr_sprite.image = self.img_queen_w
@@ -426,8 +424,7 @@ class Game():
                 curr_sprite.image = self.img_bishop_w
                 self.tablero[int(pos_x)][int(pos_y)] = "B"
 
-            self.coronado = [True, curr_sprite, self.turn + 1]
-            curr_sprite.promoted = [True, promote]
+            curr_sprite.promoted = [True, promote, self.turn + 1]
             
         self.curr_sprite = None
 

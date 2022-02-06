@@ -21,7 +21,7 @@ class Pawn(Piece):
     def __init__(self, game, color, x, y):
         super().__init__(game, color, x, y)
         self.name = "P"
-        self.promoted = [False, None]
+        self.promoted = [False, None, None]
 
         if (color == "WHITE"):
             self.image = game.img_pawn_w
