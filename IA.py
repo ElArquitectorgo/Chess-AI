@@ -6,7 +6,7 @@ class IA():
         self.level = level
 
     def generate_move(self, cnt):
-        self.game.print_tablero()
+        #self.game.print_tablero()
         #self.game.draw()
         if cnt == 0:
             return 1

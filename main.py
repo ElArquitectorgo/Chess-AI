@@ -1,11 +1,7 @@
-import time
-from turtle import pos
-import pygame, sys, random
+import pygame, sys
 import pygame.locals
 from Sprites import *
 from Random_bot import *
-from Tree import*
-from Minimax_bot import *
 from IA import *
 
 WIDTH = HEIGHT = 600
@@ -13,7 +9,7 @@ TILE_SIZE = WIDTH / 8
 
 """
 TO-DO
-hay que arreglar el coronamiento
+
 
 """
 
@@ -64,7 +60,6 @@ class Game():
         self.coronado = [False, None, None]
         
         self.bot = Random_bot(self)
-        self.minimax_bot = Minimax_bot(self, "BLACK")
         self.IA = IA(self, "WHITE")
 
         tablero2 = [['Rb', 'Nb', 'Bb', 'Qb', 'Kb', 'Bb', 'Nb', 'Rb'],
@@ -275,12 +270,12 @@ class Game():
                     pos = pygame.mouse.get_pos()
                     self.curr_sprite.set_pos((pos[0] - 65 / 2) / TILE_SIZE, (pos[1] - 65 / 2) / TILE_SIZE)
             if event.type == pygame.MOUSEBUTTONDOWN:
-                #self.down()
+                self.down()
                 pass
             if event.type == pygame.MOUSEBUTTONUP:
-                #self.up()
+                self.up()
                 #print(self.IA.generate_move(1))
-                print(self.IA.generate_move(3))
+                #print(self.IA.generate_move(3))
 
                 self.valid_moves.clear()
                 self.check_tablero()
@@ -354,7 +349,7 @@ class Game():
             print(tablero[i])
         print()
 
-    def generate_move(self, curr_sprite, pos_x, pos_y, promote=3):
+    def generate_move(self, curr_sprite, pos_x, pos_y, promote=0):
         # Genera el movimiento de la pieza dada como parámetro
 
         if self.tablero[int(pos_x)][int(pos_y)] == "K":
@@ -532,10 +527,10 @@ class Game():
 
         if self.is_check():
             print("check")
-            if self.is_checkmate("BLACK"):
+            if self.turn % 2 == 0 and self.is_checkmate("BLACK"):
                 print("Jaque mate, ganan las blancas")
                 self.playing = False
-            elif self.is_checkmate("WHITE"):
+            elif self.turn % 2 == 1 and self.is_checkmate("WHITE"):
                 print("Jaque mate, ganan las negras")
                 self.playing = False
 
@@ -589,17 +584,12 @@ class Game():
     def is_checkmate(self, color):
         # Comprueba si el jugador del color dado puede mover.
 
-        mate = False
-
         for sprite in self.pieces:
             if sprite.alive and sprite.color == color:
                 valid_moves = self.get_valid_moves(sprite)
-                if not valid_moves:
-                    mate = True
-                else:
-                    mate = False
-                    break
-        return mate
+                if valid_moves:
+                    return False
+        return True
 
 def main():
     g = Game()
