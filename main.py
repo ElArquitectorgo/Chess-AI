@@ -270,12 +270,12 @@ class Game():
                     pos = pygame.mouse.get_pos()
                     self.curr_sprite.set_pos((pos[0] - 65 / 2) / TILE_SIZE, (pos[1] - 65 / 2) / TILE_SIZE)
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.down()
+                #self.down()
                 pass
             if event.type == pygame.MOUSEBUTTONUP:
-                self.up()
+                #self.up()
                 #print(self.IA.generate_move(1))
-                #print(self.IA.generate_move(3))
+                print(self.IA.generate_move(3))
 
                 self.valid_moves.clear()
                 self.check_tablero()
