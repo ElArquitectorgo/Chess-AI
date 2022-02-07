@@ -1,7 +1,5 @@
 import pygame, sys
-import pygame.locals
 from Sprites import *
-from Random_bot import *
 from IA import *
 
 WIDTH = HEIGHT = 600
@@ -58,8 +56,6 @@ class Game():
         self.click = False
         self.curr_sprite = None   
         self.coronado = [False, None, None]
-        
-        self.bot = Random_bot(self)
         self.IA = IA(self, "WHITE")
 
         tablero2 = [['Rb', 'Nb', 'Bb', 'Qb', 'Kb', 'Bb', 'Nb', 'Rb'],
@@ -242,17 +238,6 @@ class Game():
         #        if event.type == pygame.MOUSEBUTTONDOWN:
         #            self.playing = True
 
-    def bots(self):
-        # Partida bot vs bot
-
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                self.playing = False
-                self.running = False
-        self.bot.generate_move()
-        self.check_tablero()
-        self.print_tablero()
-
     def events(self):
         # Define los eventos que van a ocurrir en nuestro juego, en este caso
         # cuando mantenemos pulsado el ratón registra la posición en el tablero,
@@ -262,7 +247,7 @@ class Game():
         # de la pieza se efectuará el movimiento.
 
         for event in pygame.event.get():
-            if event.type == QUIT:
+            if event.type == pygame.QUIT:
                 self.playing = False
                 self.running = False
             if event.type == pygame.MOUSEMOTION:
@@ -270,19 +255,19 @@ class Game():
                     pos = pygame.mouse.get_pos()
                     self.curr_sprite.set_pos((pos[0] - 65 / 2) / TILE_SIZE, (pos[1] - 65 / 2) / TILE_SIZE)
             if event.type == pygame.MOUSEBUTTONDOWN:
-                #self.down()
+                self.down()
                 pass
             if event.type == pygame.MOUSEBUTTONUP:
-                #self.up()
+                self.up()
                 #print(self.IA.generate_move(1))
-                print(self.IA.generate_move(3))
+                #print(self.IA.generate_move(3))
 
                 self.valid_moves.clear()
                 self.check_tablero()
                 self.print_tablero()
 
-            if event.type == KEYDOWN:
-                if event.key == K_c:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c:
                     self.backtrack()
 
     def down(self):
@@ -448,10 +433,10 @@ class Game():
         for i in range(8):
             for j in range(8):
                 if i % 2 == 0 and j % 2 != 0 or i % 2 != 0 and j % 2 == 0:
-                    color = Color(255,208,130)
+                    color = pygame.Color(255,208,130)
                     pygame.draw.rect(self.screen, color, (i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE), width=0)
                 else:
-                    color = Color(255,255,255)
+                    color = pygame.Color(255,255,255)
                     pygame.draw.rect(self.screen, color, (i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE), width=0)
 
     def get_valid_moves(self, sprite):
