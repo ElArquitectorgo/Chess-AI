@@ -9,7 +9,6 @@ class Game:
         pygame.display.set_caption(TITLE)
         self.clock = pygame.time.Clock()
         self.tick = TICK
-        self.running = True
 
     def run(self):
         while True:

@@ -221,21 +221,20 @@ class Chess(Game):
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
             if event.type == pygame.MOUSEMOTION:
                 if self.click == True and self.curr_sprite is not None and 1 == 2:
                     pos = pygame.mouse.get_pos()
                     self.curr_sprite.set_pos((pos[0] - 65 / 2) / TILE_SIZE, (pos[1] - 65 / 2) / TILE_SIZE)
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.down()
                 pass
+            
             if event.type == pygame.MOUSEBUTTONUP:
                 self.up()
                 #print(self.IA.generate_move(1))
                 #print(self.IA.generate_move(3))
-
-                self.valid_moves.clear()
-                self.check_tablero()
-                self.print_tablero()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:
@@ -263,6 +262,10 @@ class Chess(Game):
 
         elif self.curr_sprite is not None:
             self.curr_sprite.set_pos(self.curr_pos_x, self.curr_pos_y)
+
+        self.valid_moves.clear()
+        self.check_tablero()
+        self.print_tablero()
 
     def draw(self):
         # Dibuja en pantalla todo lo que aquí se indique, en este caso, se está
@@ -483,11 +486,6 @@ class Chess(Game):
         # entre los posibles movimientos de cada pieza se encuentra la casilla
         # de un rey, de ser así guarda el color de la pieza que provoca el jaque.
 
-        #16 - 19 tablero normal
-        # 14 - 20
-        # 19 - 18
-        # 17 - 26
-        #-1 - 0 tab
         self.check = False
         for sprite in self.pieces:
             if sprite.alive and sprite != target:
