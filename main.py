@@ -219,8 +219,8 @@ class Chess(Game):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.playing = False
-                self.running = False
+                pygame.quit()
+                sys.exit()
             if event.type == pygame.MOUSEMOTION:
                 if self.click == True and self.curr_sprite is not None and 1 == 2:
                     pos = pygame.mouse.get_pos()
@@ -472,10 +472,10 @@ class Chess(Game):
             print("check")
             if self.turn % 2 == 0 and self.is_checkmate("BLACK"):
                 print("Jaque mate, ganan las blancas")
-                self.playing = False
+                self.new()
             elif self.turn % 2 == 1 and self.is_checkmate("WHITE"):
                 print("Jaque mate, ganan las negras")
-                self.playing = False
+                self.new()
 
 
     def is_check(self, target=None):
@@ -549,11 +549,7 @@ class Chess(Game):
 
 def main():
     g = Chess()
-    while g.running:
-        g.new()
-    
-    pygame.quit()
-    sys.exit()
+    g.new()
 
 if __name__ == "__main__":
     main()

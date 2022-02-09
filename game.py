@@ -12,9 +12,7 @@ class Game:
         self.running = True
 
     def run(self):
-        self.playing = True
-
-        while self.playing:
+        while True:
             self.clock.tick(self.tick)
             self.events()
             self.draw()
