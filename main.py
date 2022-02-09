@@ -1,4 +1,5 @@
 import pygame, sys
+from game import Game
 from Sprites import *
 from IA import *
 
@@ -11,17 +12,9 @@ TO-DO
 
 """
 
-class Game():
+class Chess(Game):
     def __init__(self):
-        # Inicializa el juego.
-
-        pygame.init()
-        #pygame.mixer.init()
-        pygame.font.init()
-        self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption('Ajedrez mortal')
-        self.clock = pygame.time.Clock()
-        self.running = True
+        super().__init__(WIDTH, HEIGHT, "Ajedrez mortal", 2400)
         self.load_data()
 
     def load_data(self):
@@ -39,8 +32,6 @@ class Game():
         self.img_king_b = pygame.image.load('images/Reyn.png')
         self.img_rook_w = pygame.image.load('images/Torreb.png')
         self.img_rook_b = pygame.image.load('images/Torren.png')
-
-        print("data cargada")
 
     def new(self):
         # Crea una nueva partida, coloca cada pieza en su lugar correspondiente
@@ -217,26 +208,6 @@ class Game():
             if hasattr(self.pieces[i], "promoted") and not self.pieces[i].promoted[0] and self.pieces[i].name != "P":
                 self.pieces[i].name = "P"
                 self.tablero[int(self.pieces[i].x)][int(self.pieces[i].y)] = "P"
-            
-    def run(self):
-        # Ejecuta el juego.
-
-        self.playing = True
-
-        while self.playing:
-            self.clock.tick(2400)
-            #self.bots()
-            self.events()
-            self.draw()
-
-        # Si queremos ver el final de la partida
-        #while not self.playing:
-        #    self.draw()
-        #    for event in pygame.event.get():
-        #        if event.type == QUIT:
-        #            self.running = False
-        #        if event.type == pygame.MOUSEBUTTONDOWN:
-        #            self.playing = True
 
     def events(self):
         # Define los eventos que van a ocurrir en nuestro juego, en este caso
@@ -320,19 +291,6 @@ class Game():
         self.set_tablero(data[0], data[1])
         self.chess_position_dict.popitem()
         self.turn -= 1
-
-    def print_tablero(self):
-        # Método auxiliar cuyo único propósito es estudiar el comportamiento del tablero.
-
-        tablero = [["" for i in range(8)] for j in range(8)]
-        for i in range(8):
-            for j in range(8):
-                tablero[i][j] = self.tablero[j][i]
-                if tablero[i][j] == "":
-                    tablero[i][j] = " "
-        for i in range(8):
-            print(tablero[i])
-        print()
 
     def generate_move(self, curr_sprite, pos_x, pos_y, promote=0):
         # Genera el movimiento de la pieza dada como parámetro
@@ -576,8 +534,21 @@ class Game():
                     return False
         return True
 
+    def print_tablero(self):
+        # Método auxiliar cuyo único propósito es estudiar el comportamiento del tablero.
+
+        tablero = [["" for i in range(8)] for j in range(8)]
+        for i in range(8):
+            for j in range(8):
+                tablero[i][j] = self.tablero[j][i]
+                if tablero[i][j] == "":
+                    tablero[i][j] = " "
+        for i in range(8):
+            print(tablero[i])
+        print()
+
 def main():
-    g = Game()
+    g = Chess()
     while g.running:
         g.new()
     
