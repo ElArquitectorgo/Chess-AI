@@ -1,7 +1,7 @@
 import pygame, sys
 from game import Game
 from Sprites import *
-from IA import *
+from IA import IA
 
 WIDTH = HEIGHT = 600
 TILE_SIZE = WIDTH / 8
@@ -18,7 +18,7 @@ class Chess(Game):
         self.load_data()
 
     def load_data(self):
-        # Carga las imágenes necesarias para las piezas.
+        """Carga las imágenes necesarias para las piezas."""
 
         self.img_pawn_w = pygame.image.load('images/Peonb.png')
         self.img_pawn_b = pygame.image.load('images/Peonn.png')
@@ -34,10 +34,7 @@ class Chess(Game):
         self.img_rook_b = pygame.image.load('images/Torren.png')
 
     def new(self):
-        # Crea una nueva partida, coloca cada pieza en su lugar correspondiente
-        # y crea un tablero de 64 elementos que determinará si una casilla está
-        # vacía o no. Esto servirá para que los sprites puedan calcular sus
-        # posibles movimientos.
+        """Crea una nueva partida."""
 
         self.pieces = []
         self.valid_moves = list()
@@ -104,7 +101,7 @@ class Chess(Game):
         self.run()
 
     def create_tablero(self, tablero):
-        # Método auxiliar para crear tableros personalizados
+        """Método auxiliar para crear tableros personalizados."""
 
         self.tablero = [["" for i in range(8)] for j in range(8)]
 
@@ -149,7 +146,7 @@ class Chess(Game):
                     self.tablero[i][j] = "K"
 
     def set_tablero(self, tablero, positions):
-        # Método auxiliar para crear tableros personalizados
+        """Método auxiliar para volver a un estado anterior del tablero."""
 
         self.tablero = [["" for i in range(8)] for j in range(8)]
 
@@ -210,12 +207,7 @@ class Chess(Game):
                 self.tablero[int(self.pieces[i].x)][int(self.pieces[i].y)] = "P"
 
     def events(self):
-        # Define los eventos que van a ocurrir en nuestro juego, en este caso
-        # cuando mantenemos pulsado el ratón registra la posición en el tablero,
-        # se accede al sprite seleccionado y se calcula su lista de posibles
-        # movimientos. Cuando se suelta el ratón se comprueba la posición en la
-        # que se ha soltado, si la posición coincide con un posible movimiento
-        # de la pieza se efectuará el movimiento.
+        """Define los eventos que van a ocurrir en nuestro juego."""
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -268,9 +260,7 @@ class Chess(Game):
         self.print_tablero()
 
     def draw(self):
-        # Dibuja en pantalla todo lo que aquí se indique, en este caso, se está
-        # dibujando el tablero, las piezas y los posibles movimientos en forma
-        # de círculo.
+        """Dibuja en pantalla los elementos del juego."""
 
         self.draw_tablero()
 
@@ -287,7 +277,20 @@ class Chess(Game):
 
         pygame.display.flip()
 
+    def draw_tablero(self):
+        """Dibuja un tablero de 8x8 donde cada casilla es de tamaño TILE_SIZE*TILE_SIZE."""
+
+        for i in range(8):
+            for j in range(8):
+                if i % 2 == 0 and j % 2 != 0 or i % 2 != 0 and j % 2 == 0:
+                    color = pygame.Color(255,208,130)
+                    pygame.draw.rect(self.screen, color, (i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE), width=0)
+                else:
+                    color = pygame.Color(255,255,255)
+                    pygame.draw.rect(self.screen, color, (i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE), width=0)
+
     def backtrack(self):
+        """Vuelve al estado anterior del tablero actual."""
         if self.turn == 1:
             return
         data = self.chess_position_dict[self.turn - 1]
@@ -296,7 +299,7 @@ class Chess(Game):
         self.turn -= 1
 
     def generate_move(self, curr_sprite, pos_x, pos_y, promote=0):
-        # Genera el movimiento de la pieza dada como parámetro
+        """Genera el movimiento de la pieza dada como parámetro."""
 
         if self.tablero[int(pos_x)][int(pos_y)] == "K":
             return None
@@ -388,27 +391,15 @@ class Chess(Game):
         self.chess_position_dict.setdefault(self.turn + 1, (curr_tablero, positions))
         self.turn += 1
 
-    def draw_tablero(self):
-        # Dibuja un tablero de 8x8 donde cada casilla es de tamaño TILE_SIZE*TILE_SIZE.
-
-        for i in range(8):
-            for j in range(8):
-                if i % 2 == 0 and j % 2 != 0 or i % 2 != 0 and j % 2 == 0:
-                    color = pygame.Color(255,208,130)
-                    pygame.draw.rect(self.screen, color, (i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE), width=0)
-                else:
-                    color = pygame.Color(255,255,255)
-                    pygame.draw.rect(self.screen, color, (i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE), width=0)
-
     def get_valid_moves(self, sprite):
-        # Devuelve una lista con todos los movimientos válidos de una pieza
+        """Devuelve una lista con todos los movimientos válidos de una pieza."""
 
         valid_moves = sprite.get_valid_moves(int(sprite.x), int(sprite.y))
         return self.is_clavada(sprite, valid_moves)
 
     def get_real_valid_moves(self, color, valid_moves):
-        # Elimina de la lista dada todas aquellas casillas en las que hay
-        # una pieza del mismo color que la pieza que llama a este método.
+        """Elimina de la lista dada todas aquellas casillas en las que hay
+           una pieza del mismo color que la pieza que llama a este método."""
 
         valid_moves_copy = valid_moves.copy()
         for pt in valid_moves:
@@ -417,8 +408,8 @@ class Chess(Game):
         return valid_moves_copy
 
     def is_same_color(self, color, x, y):
-        # Comprueba si la pieza en la posición dada es del mismo color
-        # que la pieza que llama a este método.
+        """Comprueba si la pieza en la posición dada es del mismo color
+           que la pieza que llama a este método."""
 
         c = False
         for sprite in self.pieces:
@@ -428,11 +419,9 @@ class Chess(Game):
         return c 
 
     def check_tablero(self):
-        # Comprueba varios estados del tablero que por convenio son tablas.
-        # Guardar la referencia del color de las casillas de los alfiles nos
-        # permite comprobar si estamos en un estado de alfiles de mismo color.
-        # Por último comprueba si se ha producido un jaque y en caso de ser así,
-        # si se ha producido un jaque mate.
+        """Comprueba varios estados del tablero que por convenio son tablas.
+           Comprueba si se ha producido un jaque y en caso de ser así,
+           si se ha producido un jaque mate."""
 
         pieces_left = len(self.pieces)
 
@@ -482,9 +471,9 @@ class Chess(Game):
 
 
     def is_check(self, target=None):
-        # Comprueba si en la situación actual hay un jaque, para ello busca si
-        # entre los posibles movimientos de cada pieza se encuentra la casilla
-        # de un rey, de ser así guarda el color de la pieza que provoca el jaque.
+        """Comprueba si en la situación actual hay un jaque, para ello busca si
+           entre los posibles movimientos de cada pieza se encuentra la casilla
+           de un rey, de ser así guarda el color de la pieza que provoca el jaque."""
 
         self.check = False
         for sprite in self.pieces:
@@ -500,11 +489,7 @@ class Chess(Game):
         return self.check
 
     def is_clavada(self, curr_sprite, valid_moves):
-        # Se itera para cada movimiento a priori posible de la pieza,
-        # a continuación se cambia la posición de la pieza a la casilla
-        # correspondiente según el bucle, se comprueba si en esa posición
-        # la pieza en cuestión deja en jaque a su rey, de ser así elimina
-        # esa posición de la lista y continúa el bucle.
+        """Comprueba si una pieza al moverse deja en jaque a su rey."""
 
         valid_moves_copy = valid_moves.copy()
         x, y = curr_sprite.x, curr_sprite.y
@@ -523,7 +508,7 @@ class Chess(Game):
         return valid_moves_copy
 
     def is_checkmate(self, color):
-        # Comprueba si el jugador del color dado puede mover.
+        """Comprueba si el jugador del color dado puede mover."""
 
         for sprite in self.pieces:
             if sprite.alive and sprite.color == color:
@@ -533,7 +518,7 @@ class Chess(Game):
         return True
 
     def print_tablero(self):
-        # Método auxiliar cuyo único propósito es estudiar el comportamiento del tablero.
+        """Método auxiliar cuyo único propósito es estudiar el comportamiento del tablero."""
 
         tablero = [["" for i in range(8)] for j in range(8)]
         for i in range(8):
@@ -546,8 +531,8 @@ class Chess(Game):
         print()
 
 def main():
-    g = Chess()
-    g.new()
+    chess = Chess()
+    chess.new()
 
 if __name__ == "__main__":
     main()
