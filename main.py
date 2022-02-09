@@ -42,8 +42,7 @@ class Chess(Game):
         self.check = False
         self.turn = 1
         self.click = False
-        self.curr_sprite = None   
-        self.coronado = [False, None, None]
+        self.curr_sprite = None
         self.IA = IA(self, "WHITE")
 
         tablero2 = [['Rb', 'Nb', 'Bb', 'Qb', 'Kb', 'Bb', 'Nb', 'Rb'],
@@ -259,36 +258,6 @@ class Chess(Game):
         self.check_tablero()
         self.print_tablero()
 
-    def draw(self):
-        """Dibuja en pantalla los elementos del juego."""
-
-        self.draw_tablero()
-
-        for sprite in self.pieces:
-            if sprite != self.curr_sprite and sprite.alive:
-                self.screen.blit(sprite.image, (sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
-        for ele in self.valid_moves:
-            pygame.draw.circle(self.screen, (132, 255, 96), (ele[0] * TILE_SIZE + TILE_SIZE / 2, ele[1] * TILE_SIZE + TILE_SIZE / 2), 15, 0)
-
-        if self.curr_sprite is not None:
-            self.screen.blit(self.curr_sprite.image, (self.curr_sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.curr_sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
-
-        #time.sleep(0.5)
-
-        pygame.display.flip()
-
-    def draw_tablero(self):
-        """Dibuja un tablero de 8x8 donde cada casilla es de tamaño TILE_SIZE*TILE_SIZE."""
-
-        for i in range(8):
-            for j in range(8):
-                if i % 2 == 0 and j % 2 != 0 or i % 2 != 0 and j % 2 == 0:
-                    color = pygame.Color(255,208,130)
-                    pygame.draw.rect(self.screen, color, (i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE), width=0)
-                else:
-                    color = pygame.Color(255,255,255)
-                    pygame.draw.rect(self.screen, color, (i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE), width=0)
-
     def backtrack(self):
         """Vuelve al estado anterior del tablero actual."""
         if self.turn == 1:
@@ -322,7 +291,7 @@ class Chess(Game):
         self.tablero[int(pos_x)][int(pos_y)] = curr_sprite.name
 
         # Perder enroque
-        if curr_sprite.name == "K" or curr_sprite.name == "R":
+        if curr_sprite.name == "K" and curr_sprite.castling_turn is None:
             curr_sprite.castling_turn = self.turn
             if curr_sprite.image == self.img_king_w:
                 if curr_sprite.x == 4 and pos_x == 6:
@@ -397,26 +366,52 @@ class Chess(Game):
         valid_moves = sprite.get_valid_moves(int(sprite.x), int(sprite.y))
         return self.is_clavada(sprite, valid_moves)
 
-    def get_real_valid_moves(self, color, valid_moves):
-        """Elimina de la lista dada todas aquellas casillas en las que hay
-           una pieza del mismo color que la pieza que llama a este método."""
+    def is_clavada(self, curr_sprite, valid_moves):
+        """Comprueba si una pieza al moverse deja en jaque a su rey."""
 
         valid_moves_copy = valid_moves.copy()
-        for pt in valid_moves:
-            if self.is_same_color(color, pt[0], pt[1]):
-                valid_moves_copy.remove(pt)
+        x, y = curr_sprite.x, curr_sprite.y
+
+        for move in valid_moves:
+            self.generate_move(curr_sprite, move[0], move[1])
+
+            if self.is_check(curr_sprite) and curr_sprite.color != self.check_color:
+                valid_moves_copy.remove(move)
+
+            self.backtrack()
+            curr_sprite.set_pos(x, y)
+
+        self.curr_sprite = curr_sprite
+
         return valid_moves_copy
 
-    def is_same_color(self, color, x, y):
-        """Comprueba si la pieza en la posición dada es del mismo color
-           que la pieza que llama a este método."""
+    def is_check(self, target=None):
+        """Comprueba si en la situación actual hay un jaque, para ello busca si
+           entre los posibles movimientos de cada pieza se encuentra la casilla
+           de un rey, de ser así guarda el color de la pieza que provoca el jaque."""
 
-        c = False
+        self.check = False
         for sprite in self.pieces:
-            if sprite.x == x and sprite.y == y:
-                if sprite.color == color:
-                    c = True
-        return c 
+            if sprite.alive and sprite != target:
+                moves = sprite.get_valid_moves(int(sprite.x), int(sprite.y))
+                if (self.pieces[17].x, self.pieces[17].y) in moves and sprite.color == "WHITE":
+                    self.check = True
+                    self.check_color = "WHITE"
+                if (self.pieces[26].x, self.pieces[26].y) in moves and sprite.color == "BLACK":
+                    self.check = True
+                    self.check_color = "BLACK"
+
+        return self.check
+
+    def is_checkmate(self, color):
+        """Comprueba si el jugador del color dado puede mover."""
+
+        for sprite in self.pieces:
+            if sprite.alive and sprite.color == color:
+                valid_moves = self.get_valid_moves(sprite)
+                if valid_moves:
+                    return False
+        return True
 
     def check_tablero(self):
         """Comprueba varios estados del tablero que por convenio son tablas.
@@ -469,53 +464,35 @@ class Chess(Game):
                 print("Jaque mate, ganan las negras")
                 self.new()
 
+    def draw(self):
+        """Dibuja en pantalla los elementos del juego."""
 
-    def is_check(self, target=None):
-        """Comprueba si en la situación actual hay un jaque, para ello busca si
-           entre los posibles movimientos de cada pieza se encuentra la casilla
-           de un rey, de ser así guarda el color de la pieza que provoca el jaque."""
-
-        self.check = False
-        for sprite in self.pieces:
-            if sprite.alive and sprite != target:
-                moves = sprite.get_valid_moves(int(sprite.x), int(sprite.y))
-                if (self.pieces[17].x, self.pieces[17].y) in moves and sprite.color == "WHITE":
-                    self.check = True
-                    self.check_color = "WHITE"
-                if (self.pieces[26].x, self.pieces[26].y) in moves and sprite.color == "BLACK":
-                    self.check = True
-                    self.check_color = "BLACK"
-
-        return self.check
-
-    def is_clavada(self, curr_sprite, valid_moves):
-        """Comprueba si una pieza al moverse deja en jaque a su rey."""
-
-        valid_moves_copy = valid_moves.copy()
-        x, y = curr_sprite.x, curr_sprite.y
-
-        for move in valid_moves:
-            self.generate_move(curr_sprite, move[0], move[1])
-
-            if self.is_check(curr_sprite) and curr_sprite.color != self.check_color:
-                valid_moves_copy.remove(move)
-
-            self.backtrack()
-            curr_sprite.set_pos(x, y)
-
-        self.curr_sprite = curr_sprite
-
-        return valid_moves_copy
-
-    def is_checkmate(self, color):
-        """Comprueba si el jugador del color dado puede mover."""
+        self.draw_tablero()
 
         for sprite in self.pieces:
-            if sprite.alive and sprite.color == color:
-                valid_moves = self.get_valid_moves(sprite)
-                if valid_moves:
-                    return False
-        return True
+            if sprite != self.curr_sprite and sprite.alive:
+                self.screen.blit(sprite.image, (sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
+        for ele in self.valid_moves:
+            pygame.draw.circle(self.screen, (132, 255, 96), (ele[0] * TILE_SIZE + TILE_SIZE / 2, ele[1] * TILE_SIZE + TILE_SIZE / 2), 15, 0)
+
+        if self.curr_sprite is not None:
+            self.screen.blit(self.curr_sprite.image, (self.curr_sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.curr_sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
+
+        #time.sleep(0.5)
+
+        pygame.display.flip()
+
+    def draw_tablero(self):
+        """Dibuja un tablero de 8x8 donde cada casilla es de tamaño TILE_SIZE*TILE_SIZE."""
+
+        for i in range(8):
+            for j in range(8):
+                if i % 2 == 0 and j % 2 != 0 or i % 2 != 0 and j % 2 == 0:
+                    color = pygame.Color(255,208,130)
+                    pygame.draw.rect(self.screen, color, (i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE), width=0)
+                else:
+                    color = pygame.Color(255,255,255)
+                    pygame.draw.rect(self.screen, color, (i * TILE_SIZE, j * TILE_SIZE, TILE_SIZE, TILE_SIZE), width=0)
 
     def print_tablero(self):
         """Método auxiliar cuyo único propósito es estudiar el comportamiento del tablero."""

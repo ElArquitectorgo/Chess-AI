@@ -1,6 +1,27 @@
 
 from abc import ABC, abstractmethod
 
+def get_real_valid_moves(pieces, color, valid_moves):
+        """Elimina de la lista dada todas aquellas casillas en las que hay
+           una pieza del mismo color que la pieza que llama a este método."""
+
+        valid_moves_copy = valid_moves.copy()
+        for pt in valid_moves:
+            if is_same_color(pieces, color, pt[0], pt[1]):
+                valid_moves_copy.remove(pt)
+
+        return valid_moves_copy
+
+def is_same_color(pieces, color, x, y):
+    """Comprueba si la pieza en la posición dada es del mismo color
+        que la pieza que llama a este método."""
+
+    for piece in pieces:
+        if piece.x == x and piece.y == y:
+            if piece.color == color:
+                return True
+    return False
+
 class Piece(ABC):
     def __init__(self, game, color, image, value, x, y):
         self.game = game
@@ -92,7 +113,7 @@ class Pawn(Piece):
                         if self.is_comible(sprite):
                             self.valid_moves.append((x + 1, y + 1))
                                 
-        return self.game.get_real_valid_moves(self.color, self.valid_moves)
+        return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
 
 class Bishop(Piece):
     def __init__(self, game, color, image, value, x, y):
@@ -108,7 +129,7 @@ class Bishop(Piece):
             self.valid_moves.append((i, j))
             i += 1
             j +=1
-        if i < 8 and j < 8 and not self.game.is_same_color(self.color, i, j):
+        if i < 8 and j < 8:
             self.valid_moves.append((i, j))
         #Abajo izquierda
         i = x - 1
@@ -117,7 +138,7 @@ class Bishop(Piece):
             self.valid_moves.append((i, j))
             i -= 1
             j += 1
-        if i >= 0 and j < 8 and not self.game.is_same_color(self.color, i, j):
+        if i >= 0 and j < 8:
             self.valid_moves.append((i, j))
         #Arriba derecha
         i = x + 1
@@ -126,7 +147,7 @@ class Bishop(Piece):
             self.valid_moves.append((i, j))
             i += 1
             j -= 1
-        if i < 8 and j >= 0 and not self.game.is_same_color(self.color, i, j):
+        if i < 8 and j >= 0:
             self.valid_moves.append((i, j))
         #Arriba izquierda
         i = x - 1 
@@ -135,9 +156,10 @@ class Bishop(Piece):
             self.valid_moves.append((i, j))
             i -= 1 
             j -= 1
-        if i >= 0 and j >= 0 and not self.game.is_same_color(self.color, i, j):
+        if i >= 0 and j >= 0:
             self.valid_moves.append((i, j))
-        return self.valid_moves
+
+        return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
 
 class Knight(Piece):
     def __init__(self, game, color, image, value, x, y):
@@ -166,7 +188,8 @@ class Knight(Piece):
             self.valid_moves.append((x + 1, y + 2))
         if x + 2 < 8 and y + 1 < 8:
             self.valid_moves.append((x + 2, y + 1))
-        return self.game.get_real_valid_moves(self.color, self.valid_moves)
+
+        return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
 
 class Rook(Piece):
     def __init__(self, game, color, image, value, x, y):
@@ -196,12 +219,12 @@ class Rook(Piece):
                     d = True
 
         for i in range(self.left_closer_piece[0], self.right_closer_piece[0] + 1):
-            if i != x and not self.game.is_same_color(self.color, i, y):
+            if i != x and not is_same_color(self.game.pieces, self.color, i, y):
                 self.valid_moves.append((i, y))
         for j in range(self.up_closer_piece[1], self.down_closer_piece[1] + 1):
-            if j != y and not self.game.is_same_color(self.color, x, j):
+            if j != y and not is_same_color(self.game.pieces, self.color, x, j):
                 self.valid_moves.append((x, j))
-        #self.valid_moves = self.game.getRealValidMoves(self.color, self.valid_moves)
+
         return self.valid_moves
 
 class King(Piece):
@@ -250,7 +273,7 @@ class King(Piece):
                         if self.game.tablero[6][0] == "" and self.game.tablero[5][0] == "":
                             self.valid_moves.append((6, 0))
                             
-        return self.game.get_real_valid_moves(self.color, self.valid_moves)
+        return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
 
 class Queen(Piece):
     def __init__(self, game, color, image, value, x, y):
@@ -280,10 +303,10 @@ class Queen(Piece):
                     d = True
 
         for i in range(self.left_closer_piece[0], self.right_closer_piece[0] + 1):
-            if i != x and not self.game.is_same_color(self.color, i, y):
+            if i != x and not is_same_color(self.game.pieces, self.color, i, y):
                 self.valid_moves.append((i, y))
         for j in range(self.up_closer_piece[1], self.down_closer_piece[1] + 1):
-            if j != y and not self.game.is_same_color(self.color, x, j):
+            if j != y and not is_same_color(self.game.pieces, self.color, x, j):
                 self.valid_moves.append((x, j))
         #Abajo derecha
         i = x + 1
@@ -292,7 +315,7 @@ class Queen(Piece):
             self.valid_moves.append((i, j))
             i += 1
             j +=1
-        if i < 8 and j < 8 and not self.game.is_same_color(self.color, i, j):
+        if i < 8 and j < 8:
             self.valid_moves.append((i, j))
         #Abajo izquierda
         i = x - 1
@@ -301,7 +324,7 @@ class Queen(Piece):
             self.valid_moves.append((i, j))
             i -= 1
             j += 1
-        if i >= 0 and j < 8 and not self.game.is_same_color(self.color, i, j):
+        if i >= 0 and j < 8:
             self.valid_moves.append((i, j))
         #Arriba derecha
         i = x + 1
@@ -310,7 +333,7 @@ class Queen(Piece):
             self.valid_moves.append((i, j))
             i += 1
             j -= 1
-        if i < 8 and j >= 0 and not self.game.is_same_color(self.color, i, j):
+        if i < 8 and j >= 0:
             self.valid_moves.append((i, j))
         #Arriba izquierda
         i = x - 1 
@@ -319,7 +342,8 @@ class Queen(Piece):
             self.valid_moves.append((i, j))
             i -= 1 
             j -= 1
-        if i >= 0 and j >= 0 and not self.game.is_same_color(self.color, i, j):
+        if i >= 0 and j >= 0:
             self.valid_moves.append((i, j))
-        return self.valid_moves
+        
+        return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
         
