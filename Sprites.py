@@ -2,9 +2,11 @@
 from abc import ABC, abstractmethod
 
 class Piece(ABC):
-    def __init__(self, game, color, x, y):
+    def __init__(self, game, color, image, value, x, y):
         self.game = game
         self.color = color
+        self.image = image
+        self.value = value
         self.x = x
         self.y = y
         self.alive = True
@@ -18,17 +20,10 @@ class Piece(ABC):
         pass
 
 class Pawn(Piece):
-    def __init__(self, game, color, x, y):
-        super().__init__(game, color, x, y)
+    def __init__(self, game, color, image, value, x, y):
+        super().__init__(game, color, image, value, x, y)
         self.name = "P"
         self.promoted = [False, None, None]
-
-        if color == "WHITE":
-            self.image = game.img_pawn_w
-            self.value = 10
-        if color == "BLACK":
-            self.image = game.img_pawn_b
-            self.value = -10
 
     def is_comible(self, sprite):
         tablero = self.game.chess_position_dict[self.game.turn - 1][0]
@@ -100,15 +95,9 @@ class Pawn(Piece):
         return self.game.get_real_valid_moves(self.color, self.valid_moves)
 
 class Bishop(Piece):
-    def __init__(self, game, color, x, y):
-        super().__init__(game, color, x, y)
+    def __init__(self, game, color, image, value, x, y):
+        super().__init__(game, color, image, value, x, y)
         self.name = "B"
-        if color == "WHITE":
-            self.image = game.img_bishop_w
-            self.value = 30
-        if color == "BLACK":
-            self.image = game.img_bishop_b
-            self.value = -30
 
     def get_valid_moves(self, x, y):
         self.valid_moves = list()
@@ -151,15 +140,9 @@ class Bishop(Piece):
         return self.valid_moves
 
 class Knight(Piece):
-    def __init__(self, game, color, x, y):
-        super().__init__(game, color, x, y)
+    def __init__(self, game, color, image, value, x, y):
+        super().__init__(game, color, image, value, x, y)
         self.name = "N"
-        if color == "WHITE":
-            self.image = game.img_knight_w
-            self.value = 30
-        if color == "BLACK":
-            self.image = game.img_knight_b
-            self.value = -30
 
     def get_valid_moves(self, x, y):
         self.valid_moves = list()
@@ -186,16 +169,9 @@ class Knight(Piece):
         return self.game.get_real_valid_moves(self.color, self.valid_moves)
 
 class Rook(Piece):
-    def __init__(self, game, color, x, y):
-        super().__init__(game, color, x, y)
+    def __init__(self, game, color, image, value, x, y):
+        super().__init__(game, color, image, value, x, y)
         self.name = "R"
-        self.castling = True
-        if color == "WHITE":
-            self.image = game.img_rook_w
-            self.value = 50
-        if color == "BLACK":
-            self.image = game.img_rook_b
-            self.value = -50
 
     def get_valid_moves(self, x, y):
         self.valid_moves = list()
@@ -229,16 +205,10 @@ class Rook(Piece):
         return self.valid_moves
 
 class King(Piece):
-    def __init__(self, game, color, x, y):
-        super().__init__(game, color, x, y)
+    def __init__(self, game, color, image, value, x, y):
+        super().__init__(game, color, image, value, x, y)
         self.name = "K"
         self.castling_turn = None
-        if color == "WHITE":
-            self.image = game.img_king_w
-            self.value = 900
-        if color == "BLACK":
-            self.image = game.img_king_b
-            self.value = -900
 
     def get_valid_moves(self, x, y):
         self.valid_moves = list()
@@ -283,15 +253,9 @@ class King(Piece):
         return self.game.get_real_valid_moves(self.color, self.valid_moves)
 
 class Queen(Piece):
-    def __init__(self, game, color, x, y):
-        super().__init__(game, color, x, y)
+    def __init__(self, game, color, image, value, x, y):
+        super().__init__(game, color, image, value, x, y)
         self.name = "Q"
-        if color == "WHITE":
-            self.image = game.img_queen_w
-            self.value = 90
-        if color == "BLACK":
-            self.image = game.img_queen_b
-            self.value = -90
 
     def get_valid_moves(self, x, y):
         self.valid_moves = list()

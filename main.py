@@ -108,41 +108,41 @@ class Chess(Game):
         for i in range(8):
             for j in range(8):
                 if tablero[j][i] == "Pb":
-                    self.pieces.append(Pawn(self, "BLACK", i, j))
+                    self.pieces.append(Pawn(self, "BLACK", self.img_pawn_b, -10, i, j))
                     self.tablero[i][j] = "P"
                 elif tablero[j][i] == "Rb":
-                    self.pieces.append(Rook(self, "BLACK", i, j))
+                    self.pieces.append(Rook(self, "BLACK", self.img_rook_b, -50, i, j))
                     self.tablero[i][j] = "R"
                 elif tablero[j][i] == "Nb":
-                    self.pieces.append(Knight(self, "BLACK", i, j))
+                    self.pieces.append(Knight(self, "BLACK", self.img_knight_b, -30, i, j))
                     self.tablero[i][j] = "N"
                 elif tablero[j][i] == "Bb":
-                    self.pieces.append(Bishop(self, "BLACK", i, j))
+                    self.pieces.append(Bishop(self, "BLACK", self.img_bishop_b, -30, i, j))
                     self.tablero[i][j] = "B"
                 elif tablero[j][i] == "Qb":
-                    self.pieces.append(Queen(self, "BLACK", i, j))
+                    self.pieces.append(Queen(self, "BLACK", self.img_queen_b, -90, i, j))
                     self.tablero[i][j] = "Q"
                 elif tablero[j][i] == "Kb":
-                    self.pieces.append(King(self, "BLACK", i, j))
+                    self.pieces.append(King(self, "BLACK", self.img_king_b, -900, i, j))
                     self.tablero[i][j] = "K"
 
                 elif tablero[j][i] == "Pw":
-                    self.pieces.append(Pawn(self, "WHITE", i, j))
+                    self.pieces.append(Pawn(self, "WHITE", self.img_pawn_w, 10, i, j))
                     self.tablero[i][j] = "P"
                 elif tablero[j][i] == "Rw":
-                    self.pieces.append(Rook(self, "WHITE", i, j))
+                    self.pieces.append(Rook(self, "WHITE", self.img_rook_w, 50, i, j))
                     self.tablero[i][j] = "R"
                 elif tablero[j][i] == "Nw":
-                    self.pieces.append(Knight(self, "WHITE", i, j))
+                    self.pieces.append(Knight(self, "WHITE", self.img_knight_w, 30, i, j))
                     self.tablero[i][j] = "N"
                 elif tablero[j][i] == "Bw":
-                    self.pieces.append(Bishop(self, "WHITE", i, j))
+                    self.pieces.append(Bishop(self, "WHITE", self.img_bishop_w, 30, i, j))
                     self.tablero[i][j] = "B"
                 elif tablero[j][i] == "Qw":
-                    self.pieces.append(Queen(self, "WHITE", i, j))
+                    self.pieces.append(Queen(self, "WHITE", self.img_queen_w, 90, i, j))
                     self.tablero[i][j] = "Q"
                 elif tablero[j][i] == "Kw":
-                    self.pieces.append(King(self, "WHITE", i, j))
+                    self.pieces.append(King(self, "WHITE", self.img_king_w, 900, i, j))
                     self.tablero[i][j] = "K"
 
     def set_tablero(self, tablero, positions):
