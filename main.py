@@ -54,25 +54,7 @@ class Chess(Game):
                    ['Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw'],
                    ['Rw', 'Nw', 'Bw', 'Qw', 'Kw', 'Bw', 'Nw', 'Rw']]
 
-        tablero4 = [['Rb', 'Nb', 'Bb', 'Qb', '', 'Kb', '', 'Rb'],
-                   ['Pb', 'Pb', '', 'Pw', 'Bb', 'Pb', 'Pb', 'Pb'],
-                   ['', '', 'Pb', '', '', '', '', ''],
-                   ['', '', '', '', '', '', '', ''],
-                   ['', '', 'Bw', '', '', '', '', ''],
-                   ['', '', '', '', '', '', '', ''],
-                   ['Pw', 'Pw', 'Pw', '', 'Nw', 'Nb', 'Pw', 'Pw'],
-                   ['Rw', 'Nw', 'Bw', 'Qw', 'Kw', '', '', 'Rw']]
-
-        tablero = [['Rb', '', '', '', 'Kb', '', '', 'Rb'],
-                   ['Pw', 'Pb', 'Pb', 'Pb', '', 'Pb', 'Pb', 'Pb'],
-                   ['', 'Bb', '', '', '', 'Nb', 'Bb', 'Nw'],
-                   ['Nb', 'Pw', '', '', '', '', '', ''],
-                   ['Bw', 'Bw', 'Pw', '', 'Pw', '', '', ''],
-                   ['Qb', '', '', '', '', 'Nw', '', ''],
-                   ['Pw', 'Pb', '', 'Pw', '', '', 'Pw', 'Pw'],
-                   ['Rw', '', '', 'Qw', '', 'Rw', 'Kw', '']]
-
-        tablero5 = [['Rb', '', '', '', 'Kb', '', '', 'Rb'],
+        tablero2 = [['Rb', '', '', '', 'Kb', '', '', 'Rb'],
                    ['Pb', '', 'Pb', 'Pb', 'Qb', 'Pb', 'Bb', ''],
                    ['Bb', 'Nb', '', '', 'Pb', 'Nb', 'Pb', ''],
                    ['', '', '', 'Pw', 'Nw', '', '', ''],
@@ -89,6 +71,36 @@ class Chess(Game):
                    ['', '', '', '', '', '', '', ''],
                    ['', '', '', '', 'Pw', '', 'Pw', ''],
                    ['', '', '', '', '', '', '', '']]
+
+        # Para 1 y 2 ok, 3 me sale 9 551 y debería ser 9 467
+        tablero4 = [['Rb', '', '', '', 'Kb', '', '', 'Rb'],
+                   ['Pw', 'Pb', 'Pb', 'Pb', '', 'Pb', 'Pb', 'Pb'],
+                   ['', 'Bb', '', '', '', 'Nb', 'Bb', 'Nw'],
+                   ['Nb', 'Pw', '', '', '', '', '', ''],
+                   ['Bw', 'Bw', 'Pw', '', 'Pw', '', '', ''],
+                   ['Qb', '', '', '', '', 'Nw', '', ''],
+                   ['Pw', 'Pb', '', 'Pw', '', '', 'Pw', 'Pw'],
+                   ['Rw', '', '', 'Qw', '', 'Rw', 'Kw', '']]
+
+        # Para 1 y 2 ok, 3 me sale 62 445 y debería ser 62 379
+        tablero5 = [['Rb', 'Nb', 'Bb', 'Qb', '', 'Kb', '', 'Rb'],
+                   ['Pb', 'Pb', '', 'Pw', 'Bb', 'Pb', 'Pb', 'Pb'],
+                   ['', '', 'Pb', '', '', '', '', ''],
+                   ['', '', '', '', '', '', '', ''],
+                   ['', '', 'Bw', '', '', '', '', ''],
+                   ['', '', '', '', '', '', '', ''],
+                   ['Pw', 'Pw', 'Pw', '', 'Nw', 'Nb', 'Pw', 'Pw'],
+                   ['Rw', 'Nw', 'Bw', 'Qw', 'Kw', '', '', 'Rw']]
+
+        # Para 1, 2 y 3 va perfe
+        tablero6 = [['Rb', '', '', '', '', 'Rb', 'Kb', ''],
+                   ['', 'Pb', 'Pb', '', 'Qb', 'Pb', 'Pb', 'Pb'],
+                   ['Pb', '', 'Nb', 'Pb', '', 'Nb', '', ''],
+                   ['', '', 'Bb', '', 'Pb', '', 'Bw', ''],
+                   ['', '', 'Bw', '', 'Pw', '', 'Bb', ''],
+                   ['Pw', '', 'Nw', 'Pw', '', 'Nw', '', ''],
+                   ['', 'Pw', 'Pw', '', 'Qw', 'Pw', 'Pw', 'Pw'],
+                   ['Rw', '', '', '', '', 'Rw', 'Kw', '']]
     
         self.create_tablero(tablero)
         
@@ -225,7 +237,9 @@ class Chess(Game):
             if event.type == pygame.MOUSEBUTTONUP:
                 self.up()
                 #print(self.IA.generate_move(1))
+                #print(self.IA.generate_move(2))
                 #print(self.IA.generate_move(3))
+                #print(self.IA.generate_move(4))
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:

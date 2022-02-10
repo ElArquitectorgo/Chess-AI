@@ -255,7 +255,7 @@ class King(Piece):
         if x + 1 < 8:
             self.valid_moves.append((x + 1, y))
         #Enroque
-        if self.castling_turn is None:
+        if self.castling_turn is None and self.x == 4 and self.y == 0 or self.castling_turn is None and self.x == 4 and self.y == 7:
             if self.color == "WHITE":
                 for sprite in self.game.pieces:
                     if sprite.x == 0 and sprite.y == 7 and sprite.image == self.game.img_rook_w:
