@@ -255,23 +255,22 @@ class King(Piece):
         if x + 1 < 8:
             self.valid_moves.append((x + 1, y))
         #Enroque
+        # 259 está así por los tableros personalizados
         if self.castling_turn is None and self.x == 4 and self.y == 0 or self.castling_turn is None and self.x == 4 and self.y == 7:
             if self.color == "WHITE":
-                for sprite in self.game.pieces:
-                    if sprite.x == 0 and sprite.y == 7 and sprite.image == self.game.img_rook_w:
+                if self.game.pieces[4].x == 0 and self.game.pieces[4].y == 7:
                         if self.game.tablero[1][7] == "" and self.game.tablero[2][7] == "" and self.game.tablero[3][7] == "":
                             self.valid_moves.append((2, 7))
-                    if sprite.x == 7 and sprite.y == 7 and sprite.image == self.game.img_rook_w:
-                        if self.game.tablero[6][7] == "" and self.game.tablero[5][7] == "":
-                            self.valid_moves.append((6, 7))
+                if self.game.pieces[-1].x == 7 and self.game.pieces[-1].y == 7:
+                    if self.game.tablero[6][7] == "" and self.game.tablero[5][7] == "":
+                        self.valid_moves.append((6, 7))
             else:
-                for sprite in self.game.pieces:
-                    if sprite.x == 0 and sprite.y == 0 and sprite.image == self.game.img_rook_b:
+                if self.game.pieces[0].x == 0 and self.game.pieces[0].y == 0:
                         if self.game.tablero[1][0] == "" and self.game.tablero[2][0] == "" and self.game.tablero[3][0] == "":
                             self.valid_moves.append((2, 0))
-                    if sprite.x == 7 and sprite.y == 0 and sprite.image == self.game.img_rook_b:
-                        if self.game.tablero[6][0] == "" and self.game.tablero[5][0] == "":
-                            self.valid_moves.append((6, 0))
+                if self.game.pieces[-4].x == 7 and self.game.pieces[-4].y == 0:
+                    if self.game.tablero[6][0] == "" and self.game.tablero[5][0] == "":
+                        self.valid_moves.append((6, 0))
                             
         return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
 

@@ -240,7 +240,7 @@ class Chess(Game):
                 self.up()
                 #print(self.IA.generate_move(1))
                 print(self.IA.generate_move(2))
-                #print(self.IA.generate_move(3))
+                print(self.IA.generate_move(3))
                 #print(self.IA.generate_move(4))
 
             if event.type == pygame.KEYDOWN:
