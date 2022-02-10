@@ -1,3 +1,4 @@
+import time
 import pygame, sys
 from game import Game
 from Sprites import *
@@ -54,7 +55,8 @@ class Chess(Game):
                    ['Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw'],
                    ['Rw', 'Nw', 'Bw', 'Qw', 'Kw', 'Bw', 'Nw', 'Rw']]
 
-        tablero2 = [['Rb', '', '', '', 'Kb', '', '', 'Rb'],
+        # 14 20 Para 1 ok, 2 me sale 2043 y debería ser 2039
+        tablero = [['Rb', '', '', '', 'Kb', '', '', 'Rb'],
                    ['Pb', '', 'Pb', 'Pb', 'Qb', 'Pb', 'Bb', ''],
                    ['Bb', 'Nb', '', '', 'Pb', 'Nb', 'Pb', ''],
                    ['', '', '', 'Pw', 'Nw', '', '', ''],
@@ -193,7 +195,7 @@ class Chess(Game):
             self.pieces[i].set_pos(positions[i][0], positions[i][1])
             if positions[i][0] != -10:
                 self.pieces[i].alive = True
-            if i == 17 or i == 26:
+            if i == 14 or i == 20:
                 if self.pieces[i].castling_turn is not None:
                     if self.pieces[i].castling_turn + 1 == self.turn:
                         self.pieces[i].castling_turn = None
@@ -237,7 +239,7 @@ class Chess(Game):
             if event.type == pygame.MOUSEBUTTONUP:
                 self.up()
                 #print(self.IA.generate_move(1))
-                #print(self.IA.generate_move(2))
+                print(self.IA.generate_move(2))
                 #print(self.IA.generate_move(3))
                 #print(self.IA.generate_move(4))
 
@@ -314,7 +316,7 @@ class Chess(Game):
                         self.tablero[7][7] = ""
                         self.tablero[5][7] = "R"
                 elif curr_sprite.x == 4 and pos_x == 2:
-                    if self.pieces[22].x == 0 and self.pieces[22].y == 7:
+                    if self.pieces[4].x == 0 and self.pieces[4].y == 7:
                         self.pieces[4].set_pos(3, 7)
                         self.tablero[0][7] = ""
                         self.tablero[3][7] = "R"
@@ -408,10 +410,10 @@ class Chess(Game):
         for sprite in self.pieces:
             if sprite.alive and sprite != target:
                 moves = sprite.get_valid_moves(int(sprite.x), int(sprite.y))
-                if (self.pieces[17].x, self.pieces[17].y) in moves and sprite.color == "WHITE":
+                if (self.pieces[14].x, self.pieces[14].y) in moves and sprite.color == "WHITE":
                     self.check = True
                     self.check_color = "WHITE"
-                if (self.pieces[26].x, self.pieces[26].y) in moves and sprite.color == "BLACK":
+                if (self.pieces[20].x, self.pieces[20].y) in moves and sprite.color == "BLACK":
                     self.check = True
                     self.check_color = "BLACK"
 
@@ -492,7 +494,7 @@ class Chess(Game):
         if self.curr_sprite is not None:
             self.screen.blit(self.curr_sprite.image, (self.curr_sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.curr_sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
 
-        #time.sleep(0.5)
+        #time.sleep(0.2)
 
         pygame.display.flip()
 
