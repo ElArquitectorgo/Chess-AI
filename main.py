@@ -16,7 +16,7 @@ Arreglar las tablas
 
 class Chess(Game):
     def __init__(self):
-        super().__init__(WIDTH, HEIGHT, "Ajedrez mortal", 2400)
+        super().__init__(WIDTH=WIDTH, HEIGHT=HEIGHT, TITLE="Ajedrez mortal", TICK=2400)
         self.load_data()
 
     def load_data(self):
