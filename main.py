@@ -10,6 +10,7 @@ TILE_SIZE = WIDTH / 8
 """
 TO-DO
 
+Arreglar las tablas
 
 """
 
@@ -21,18 +22,18 @@ class Chess(Game):
     def load_data(self):
         """Carga las imágenes necesarias para las piezas."""
 
-        self.img_pawn_w = pygame.image.load('images/Peonb.png')
-        self.img_pawn_b = pygame.image.load('images/Peonn.png')
-        self.img_bishop_w = pygame.image.load('images/Alfilb.png')
-        self.img_bishop_b = pygame.image.load('images/Alfiln.png')
-        self.img_knight_w = pygame.image.load('images/Caballob.png')
-        self.img_knight_b = pygame.image.load('images/Caballon.png')
-        self.img_queen_w = pygame.image.load('images/Damab.png')
-        self.img_queen_b = pygame.image.load('images/Daman.png')
-        self.img_king_w = pygame.image.load('images/Reyb.png')
-        self.img_king_b = pygame.image.load('images/Reyn.png')
-        self.img_rook_w = pygame.image.load('images/Torreb.png')
-        self.img_rook_b = pygame.image.load('images/Torren.png')
+        self.img_pawn_w = pygame.image.load('images/Peonb.png').convert_alpha()
+        self.img_pawn_b = pygame.image.load('images/Peonn.png').convert_alpha()
+        self.img_bishop_w = pygame.image.load('images/Alfilb.png').convert_alpha()
+        self.img_bishop_b = pygame.image.load('images/Alfiln.png').convert_alpha()
+        self.img_knight_w = pygame.image.load('images/Caballob.png').convert_alpha()
+        self.img_knight_b = pygame.image.load('images/Caballon.png').convert_alpha()
+        self.img_queen_w = pygame.image.load('images/Damab.png').convert_alpha()
+        self.img_queen_b = pygame.image.load('images/Daman.png').convert_alpha()
+        self.img_king_w = pygame.image.load('images/Reyb.png').convert_alpha()
+        self.img_king_b = pygame.image.load('images/Reyn.png').convert_alpha()
+        self.img_rook_w = pygame.image.load('images/Torreb.png').convert_alpha()
+        self.img_rook_b = pygame.image.load('images/Torren.png').convert_alpha()
 
     def new(self):
         """Crea una nueva partida."""
@@ -239,8 +240,8 @@ class Chess(Game):
             if event.type == pygame.MOUSEBUTTONUP:
                 self.up()
                 #print(self.IA.generate_move(1))
-                print(self.IA.generate_move(2))
-                print(self.IA.generate_move(3))
+                #print(self.IA.generate_move(2))
+                #print(self.IA.generate_move(3))
                 #print(self.IA.generate_move(4))
 
             if event.type == pygame.KEYDOWN:
@@ -276,6 +277,7 @@ class Chess(Game):
 
     def backtrack(self):
         """Vuelve al estado anterior del tablero actual."""
+
         if self.turn == 1:
             return
         data = self.chess_position_dict[self.turn - 1]
@@ -335,6 +337,7 @@ class Chess(Game):
         curr_sprite.set_pos(pos_x, pos_y) 
 
         # Coronar peón
+        # Habría que actualizar el valor de la pieza e incluir las imágenes negras
         if curr_sprite.image == self.img_pawn_w and pos_y == 0 and not curr_sprite.promoted[0] or curr_sprite.image == self.img_pawn_b and pos_y == 7 and not curr_sprite.promoted[0]:
             if promote == 0:
                 curr_sprite.name = "Q"
@@ -433,8 +436,6 @@ class Chess(Game):
         """Comprueba varios estados del tablero que por convenio son tablas.
            Comprueba si se ha producido un jaque y en caso de ser así,
            si se ha producido un jaque mate."""
-
-        pieces_left = len(self.pieces)
 
         """if pieces_left == 2:
             print("Tablas")
