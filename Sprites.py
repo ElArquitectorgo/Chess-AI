@@ -2,15 +2,15 @@
 from abc import ABC, abstractmethod
 
 def get_real_valid_moves(pieces, color, valid_moves):
-        """Elimina de la lista dada todas aquellas casillas en las que hay
-           una pieza del mismo color que la pieza que llama a este método."""
+    """Elimina de la lista dada todas aquellas casillas en las que hay
+        una pieza del mismo color que la pieza que llama a este método."""
 
-        valid_moves_copy = valid_moves.copy()
-        for pt in valid_moves:
-            if is_same_color(pieces, color, pt[0], pt[1]):
-                valid_moves_copy.remove(pt)
+    valid_moves_copy = valid_moves.copy()
+    for pt in valid_moves:
+        if is_same_color(pieces, color, pt[0], pt[1]):
+            valid_moves_copy.remove(pt)
 
-        return valid_moves_copy
+    return valid_moves_copy
 
 def is_same_color(pieces, color, x, y):
     """Comprueba si la pieza en la posición dada es del mismo color
