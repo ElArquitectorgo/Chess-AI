@@ -41,7 +41,6 @@ class Chess(Game):
         self.pieces = []
         self.valid_moves = list()
         self.chess_position_dict = dict()
-        self.check = False
         self.turn = 1
         self.click = False
         self.curr_sprite = None
@@ -409,18 +408,18 @@ class Chess(Game):
            entre los posibles movimientos de cada pieza se encuentra la casilla
            de un rey, de ser así guarda el color de la pieza que provoca el jaque."""
 
-        self.check = False
+        check = False
         for sprite in self.pieces:
             if sprite.alive and sprite != target:
                 moves = sprite.get_valid_moves(int(sprite.x), int(sprite.y))
                 if (self.pieces[14].x, self.pieces[14].y) in moves and sprite.color == "WHITE":
-                    self.check = True
+                    check = True
                     self.check_color = "WHITE"
                 if (self.pieces[20].x, self.pieces[20].y) in moves and sprite.color == "BLACK":
-                    self.check = True
+                    check = True
                     self.check_color = "BLACK"
 
-        return self.check
+        return check
 
     def is_checkmate(self, color):
         """Comprueba si el jugador del color dado puede mover."""
