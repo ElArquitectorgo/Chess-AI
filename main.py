@@ -494,7 +494,7 @@ class Chess(Game):
         if self.curr_sprite is not None:
             self.screen.blit(self.curr_sprite.image, (self.curr_sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.curr_sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
 
-        #time.sleep(0.2)
+        #time.sleep(0.8)
 
         pygame.display.flip()
 
