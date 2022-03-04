@@ -11,6 +11,7 @@ TILE_SIZE = WIDTH / 8
 TO-DO
 
 Arreglar las tablas
+Perder enroque al mover una torre
 
 """
 
@@ -41,7 +42,6 @@ class Chess(Game):
         self.pieces = []
         self.valid_moves = list()
         self.chess_position_dict = dict()
-        self.turn = 1
         self.click = False
         self.curr_sprite = None
         self.IA = IA(self, "WHITE")
@@ -63,6 +63,8 @@ class Chess(Game):
                     self.turn = 1
                 else:
                     self.turn = 2
+
+                self.castling = data[2]
 
                 data = data[0]
 
@@ -89,7 +91,7 @@ class Chess(Game):
         for p in self.pieces:
             positions.append((p.x, p.y))
 
-        self.chess_position_dict.setdefault(self.turn, (tablero, positions))
+        self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
         self.run()
 
     def create_tablero(self, tablero):
@@ -174,10 +176,6 @@ class Chess(Game):
             self.pieces[i].set_pos(positions[i][0], positions[i][1])
             if positions[i][0] != -10:
                 self.pieces[i].alive = True
-            if i == 14 or i == 20:
-                if self.pieces[i].castling_turn is not None:
-                    if self.pieces[i].castling_turn + 1 == self.turn:
-                        self.pieces[i].castling_turn = None
 
             # Retroceder el coronamiento
             if hasattr(self.pieces[i], "promoted") and self.pieces[i].promoted[0]:
@@ -260,6 +258,7 @@ class Chess(Game):
             return
         data = self.chess_position_dict[self.turn - 1]
         self.set_tablero(data[0], data[1])
+        self.castling = data[2]
         self.chess_position_dict.popitem()
         self.turn -= 1
 
@@ -287,8 +286,8 @@ class Chess(Game):
         self.tablero[int(pos_x)][int(pos_y)] = curr_sprite.name
 
         # Perder enroque
-        if curr_sprite.name == "K" and curr_sprite.castling_turn is None:
-            curr_sprite.castling_turn = self.turn
+        if curr_sprite.name == "K":
+            self.castling = "-"
             if curr_sprite.image == self.img_king_w:
                 if curr_sprite.x == 4 and pos_x == 6:
                     if self.pieces[-1].x == 7 and self.pieces[-1].y == 7:
@@ -354,7 +353,7 @@ class Chess(Game):
         for p in self.pieces:
             positions.append((p.x, p.y))
 
-        self.chess_position_dict.setdefault(self.turn + 1, (curr_tablero, positions))
+        self.chess_position_dict.setdefault(self.turn + 1, (curr_tablero, positions, self.castling))
         self.turn += 1
 
     def get_valid_moves(self, sprite):
