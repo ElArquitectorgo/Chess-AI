@@ -46,63 +46,37 @@ class Chess(Game):
         self.curr_sprite = None
         self.IA = IA(self, "WHITE")
 
-        tablero2 = [['Rb', 'Nb', 'Bb', 'Qb', 'Kb', 'Bb', 'Nb', 'Rb'],
-                   ['Pb', 'Pb', 'Pb', 'Pb', 'Pb', 'Pb', 'Pb', 'Pb'],
-                   ['', '', '', '', '', '', '', ''],
-                   ['', '', '', '', '', '', '', ''],
-                   ['', '', '', '', '', '', '', ''],
-                   ['', '', '', '', '', '', '', ''],
-                   ['Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw'],
-                   ['Rw', 'Nw', 'Bw', 'Qw', 'Kw', 'Bw', 'Nw', 'Rw']]
+        position1 = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        position2 = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -"
+        position3 = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - "
+        position4 = "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
+        position5 = "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8"
+        position6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"
+
+
+        tablero = [["" for i in range(8)] for j in range(8)]
+        str = (position3).split("/")
+        for i in range(8):
+            data = str[i]
+            if i == 7:
+                data = str[i].split()[0]
+
+            cnt = 0
+            for c in data:
+                if c.isnumeric():
+                    cnt += int(c) - 1
+
+                tablero[i][cnt] = c
+
+                cnt += 1
 
         # 14 20 Para 1 ok, 2 me sale 2043 y debería ser 2039
-        tablero = [['Rb', '', '', '', 'Kb', '', '', 'Rb'],
-                   ['Pb', '', 'Pb', 'Pb', 'Qb', 'Pb', 'Bb', ''],
-                   ['Bb', 'Nb', '', '', 'Pb', 'Nb', 'Pb', ''],
-                   ['', '', '', 'Pw', 'Nw', '', '', ''],
-                   ['', 'Pb', '', '', 'Pw', '', '', ''],
-                   ['', '', 'Nw', '', '', 'Qw', '', 'Pb'],
-                   ['Pw', 'Pw', 'Pw', 'Bw', 'Bw', 'Pw', 'Pw', 'Pw'],
-                   ['Rw', '', '', '', 'Kw', '', '', 'Rw']]
-
-        tablero3 = [['', '', '', '', '', '', '', ''],
-                   ['', '', 'Pb', '', '', '', '', ''],
-                   ['', '', '', 'Pb', '', '', '', ''],
-                   ['Kw', 'Pw', '', '', '', '', '', 'Rb'],
-                   ['', 'Rw', '', '', '', 'Pb', '', 'Kb'],
-                   ['', '', '', '', '', '', '', ''],
-                   ['', '', '', '', 'Pw', '', 'Pw', ''],
-                   ['', '', '', '', '', '', '', '']]
 
         # Para 1 y 2 ok, 3 me sale 9 551 y debería ser 9 467
-        tablero4 = [['Rb', '', '', '', 'Kb', '', '', 'Rb'],
-                   ['Pw', 'Pb', 'Pb', 'Pb', '', 'Pb', 'Pb', 'Pb'],
-                   ['', 'Bb', '', '', '', 'Nb', 'Bb', 'Nw'],
-                   ['Nb', 'Pw', '', '', '', '', '', ''],
-                   ['Bw', 'Bw', 'Pw', '', 'Pw', '', '', ''],
-                   ['Qb', '', '', '', '', 'Nw', '', ''],
-                   ['Pw', 'Pb', '', 'Pw', '', '', 'Pw', 'Pw'],
-                   ['Rw', '', '', 'Qw', '', 'Rw', 'Kw', '']]
 
         # Para 1 y 2 ok, 3 me sale 62 445 y debería ser 62 379
-        tablero5 = [['Rb', 'Nb', 'Bb', 'Qb', '', 'Kb', '', 'Rb'],
-                   ['Pb', 'Pb', '', 'Pw', 'Bb', 'Pb', 'Pb', 'Pb'],
-                   ['', '', 'Pb', '', '', '', '', ''],
-                   ['', '', '', '', '', '', '', ''],
-                   ['', '', 'Bw', '', '', '', '', ''],
-                   ['', '', '', '', '', '', '', ''],
-                   ['Pw', 'Pw', 'Pw', '', 'Nw', 'Nb', 'Pw', 'Pw'],
-                   ['Rw', 'Nw', 'Bw', 'Qw', 'Kw', '', '', 'Rw']]
 
         # Para 1, 2 y 3 va perfe
-        tablero6 = [['Rb', '', '', '', '', 'Rb', 'Kb', ''],
-                   ['', 'Pb', 'Pb', '', 'Qb', 'Pb', 'Pb', 'Pb'],
-                   ['Pb', '', 'Nb', 'Pb', '', 'Nb', '', ''],
-                   ['', '', 'Bb', '', 'Pb', '', 'Bw', ''],
-                   ['', '', 'Bw', '', 'Pw', '', 'Bb', ''],
-                   ['Pw', '', 'Nw', 'Pw', '', 'Nw', '', ''],
-                   ['', 'Pw', 'Pw', '', 'Qw', 'Pw', 'Pw', 'Pw'],
-                   ['Rw', '', '', '', '', 'Rw', 'Kw', '']]
     
         self.create_tablero(tablero)
         
@@ -120,41 +94,41 @@ class Chess(Game):
 
         for i in range(8):
             for j in range(8):
-                if tablero[j][i] == "Pb":
+                if tablero[j][i] == "p":
                     self.pieces.append(Pawn(self, "BLACK", self.img_pawn_b, -10, i, j))
                     self.tablero[i][j] = "P"
-                elif tablero[j][i] == "Rb":
+                elif tablero[j][i] == "r":
                     self.pieces.append(Rook(self, "BLACK", self.img_rook_b, -50, i, j))
                     self.tablero[i][j] = "R"
-                elif tablero[j][i] == "Nb":
+                elif tablero[j][i] == "n":
                     self.pieces.append(Knight(self, "BLACK", self.img_knight_b, -30, i, j))
                     self.tablero[i][j] = "N"
-                elif tablero[j][i] == "Bb":
+                elif tablero[j][i] == "b":
                     self.pieces.append(Bishop(self, "BLACK", self.img_bishop_b, -30, i, j))
                     self.tablero[i][j] = "B"
-                elif tablero[j][i] == "Qb":
+                elif tablero[j][i] == "q":
                     self.pieces.append(Queen(self, "BLACK", self.img_queen_b, -90, i, j))
                     self.tablero[i][j] = "Q"
-                elif tablero[j][i] == "Kb":
+                elif tablero[j][i] == "k":
                     self.pieces.append(King(self, "BLACK", self.img_king_b, -900, i, j))
                     self.tablero[i][j] = "K"
 
-                elif tablero[j][i] == "Pw":
+                elif tablero[j][i] == "P":
                     self.pieces.append(Pawn(self, "WHITE", self.img_pawn_w, 10, i, j))
                     self.tablero[i][j] = "P"
-                elif tablero[j][i] == "Rw":
+                elif tablero[j][i] == "R":
                     self.pieces.append(Rook(self, "WHITE", self.img_rook_w, 50, i, j))
                     self.tablero[i][j] = "R"
-                elif tablero[j][i] == "Nw":
+                elif tablero[j][i] == "N":
                     self.pieces.append(Knight(self, "WHITE", self.img_knight_w, 30, i, j))
                     self.tablero[i][j] = "N"
-                elif tablero[j][i] == "Bw":
+                elif tablero[j][i] == "B":
                     self.pieces.append(Bishop(self, "WHITE", self.img_bishop_w, 30, i, j))
                     self.tablero[i][j] = "B"
-                elif tablero[j][i] == "Qw":
+                elif tablero[j][i] == "Q":
                     self.pieces.append(Queen(self, "WHITE", self.img_queen_w, 90, i, j))
                     self.tablero[i][j] = "Q"
-                elif tablero[j][i] == "Kw":
+                elif tablero[j][i] == "K":
                     self.pieces.append(King(self, "WHITE", self.img_king_w, 900, i, j))
                     self.tablero[i][j] = "K"
 
@@ -165,30 +139,30 @@ class Chess(Game):
 
         for i in range(8):
             for j in range(8):
-                if tablero[j][i] == "Pb":
+                if tablero[j][i] == "p":
                     self.tablero[i][j] = "P"
-                elif tablero[j][i] == "Rb":
+                elif tablero[j][i] == "r":
                     self.tablero[i][j] = "R"
-                elif tablero[j][i] == "Nb":
+                elif tablero[j][i] == "n":
                     self.tablero[i][j] = "N"
-                elif tablero[j][i] == "Bb":
+                elif tablero[j][i] == "b":
                     self.tablero[i][j] = "B"
-                elif tablero[j][i] == "Qb":
+                elif tablero[j][i] == "q":
                     self.tablero[i][j] = "Q"
-                elif tablero[j][i] == "Kb":
+                elif tablero[j][i] == "k":
                     self.tablero[i][j] = "K"
 
-                elif tablero[j][i] == "Pw":
+                elif tablero[j][i] == "P":
                     self.tablero[i][j] = "P"
-                elif tablero[j][i] == "Rw":
+                elif tablero[j][i] == "R":
                     self.tablero[i][j] = "R"
-                elif tablero[j][i] == "Nw":
+                elif tablero[j][i] == "N":
                     self.tablero[i][j] = "N"
-                elif tablero[j][i] == "Bw":
+                elif tablero[j][i] == "B":
                     self.tablero[i][j] = "B"
-                elif tablero[j][i] == "Qw":
+                elif tablero[j][i] == "Q":
                     self.tablero[i][j] = "Q"
-                elif tablero[j][i] == "Kw":
+                elif tablero[j][i] == "K":
                     self.tablero[i][j] = "K"
 
         for i in range(len(self.pieces)):
@@ -365,11 +339,11 @@ class Chess(Game):
             if not sprite.alive:
                 continue
             elif sprite.color == "WHITE":
-                str = "w"
+                str = sprite.name
             else:
-                str = "b"
+                str = sprite.name.lower()
 
-            curr_tablero[int(sprite.y)][int(sprite.x)] = sprite.name + str
+            curr_tablero[int(sprite.y)][int(sprite.x)] = str
         
         positions = []
         for p in self.pieces:

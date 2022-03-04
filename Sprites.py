@@ -49,9 +49,9 @@ class Pawn(Piece):
     def is_comible(self, sprite):
         tablero = self.game.chess_position_dict[self.game.turn - 1][0]
 
-        if tablero[1][int(sprite.x)] == "Pb" and int(sprite.y) == 3 and tablero[3][int(sprite.x)] != "Pb":
+        if tablero[1][int(sprite.x)] == "p" and int(sprite.y) == 3 and tablero[3][int(sprite.x)] != "p":
             return True
-        if tablero[6][int(sprite.x)] == "Pw" and int(sprite.y) == 4 and tablero[4][int(sprite.x)] != "Pw":
+        if tablero[6][int(sprite.x)] == "P" and int(sprite.y) == 4 and tablero[4][int(sprite.x)] != "P":
             return True
         
         return False
