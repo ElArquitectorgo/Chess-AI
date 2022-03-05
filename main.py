@@ -11,7 +11,6 @@ TILE_SIZE = WIDTH / 8
 TO-DO
 
 Arreglar las tablas
-Perder enroque al mover una torre
 
 """
 
@@ -295,7 +294,7 @@ class Chess(Game):
                 self.castling = self.castling.replace("k", "")
             if self.castling == "":
                 self.castling == "-"
-                
+
             if curr_sprite.image == self.img_king_w:
                 if curr_sprite.x == 4 and pos_x == 6:
                     if self.pieces[-1].x == 7 and self.pieces[-1].y == 7:
