@@ -231,7 +231,6 @@ class King(Piece):
     def __init__(self, game, color, image, value, x, y):
         super().__init__(game, color, image, value, x, y)
         self.name = "K"
-        self.castling_turn = None
 
     def get_valid_moves(self, x, y):
         self.valid_moves = list()
@@ -255,7 +254,6 @@ class King(Piece):
         if x + 1 < 8:
             self.valid_moves.append((x + 1, y))
         #Enroque
-        # 259 está así por los tableros personalizados
         if self.game.castling != "-":
             for c in self.game.castling:
                 if c == "K" and self.color == "WHITE":

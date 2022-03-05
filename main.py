@@ -65,7 +65,6 @@ class Chess(Game):
                     self.turn = 2
 
                 self.castling = data[2]
-
                 data = data[0]
 
             cnt = 0
@@ -74,10 +73,9 @@ class Chess(Game):
                     cnt += int(c) - 1
 
                 tablero[i][cnt] = c
-
                 cnt += 1
 
-        # 14 20 Para 1 ok, 2 me sale 2043 y debería ser 2039
+        # Para 1 ok, 2 me sale 2043 y debería ser 2039
 
         # Para 1 y 2 ok, 3 me sale 9 551 y debería ser 9 467
 
@@ -119,6 +117,7 @@ class Chess(Game):
                 elif tablero[j][i] == "k":
                     self.pieces.append(King(self, "BLACK", self.img_king_b, -900, i, j))
                     self.tablero[i][j] = "K"
+                    self.black_king_index = len(self.pieces) - 1
 
                 elif tablero[j][i] == "P":
                     self.pieces.append(Pawn(self, "WHITE", self.img_pawn_w, 10, i, j))
@@ -138,6 +137,7 @@ class Chess(Game):
                 elif tablero[j][i] == "K":
                     self.pieces.append(King(self, "WHITE", self.img_king_w, 900, i, j))
                     self.tablero[i][j] = "K"
+                    self.white_king_index = len(self.pieces) - 1
 
     def set_tablero(self, tablero, positions):
         """Método auxiliar para volver a un estado anterior del tablero."""
@@ -287,7 +287,15 @@ class Chess(Game):
 
         # Perder enroque
         if curr_sprite.name == "K":
-            self.castling = "-"
+            if curr_sprite.color == "WHITE":
+                self.castling = self.castling.replace("Q", "")
+                self.castling = self.castling.replace("K", "")
+            else:
+                self.castling = self.castling.replace("q", "")
+                self.castling = self.castling.replace("k", "")
+            if self.castling == "":
+                self.castling == "-"
+                
             if curr_sprite.image == self.img_king_w:
                 if curr_sprite.x == 4 and pos_x == 6:
                     if self.pieces[-1].x == 7 and self.pieces[-1].y == 7:
@@ -310,6 +318,17 @@ class Chess(Game):
                         self.pieces[0].set_pos(3, 0)
                         self.tablero[0][0] = ""
                         self.tablero[3][0] = "R"
+
+        if curr_sprite.name == "R":
+            if self.castling != "-":
+                if curr_sprite.x == 0 and curr_sprite.y == 0:
+                    self.castling = self.castling.replace("q", "")
+                elif curr_sprite.x == 7 and curr_sprite.y == 0:
+                    self.castling = self.castling.replace("k", "")
+                elif curr_sprite.x == 0 and curr_sprite.y == 7:
+                    self.castling = self.castling.replace("Q", "")
+                elif curr_sprite.x == 7 and curr_sprite.y == 7:
+                    self.castling = self.castling.replace("K", "")
 
         curr_sprite.set_pos(pos_x, pos_y) 
 
@@ -390,10 +409,10 @@ class Chess(Game):
         for sprite in self.pieces:
             if sprite.alive and sprite != target:
                 moves = sprite.get_valid_moves(int(sprite.x), int(sprite.y))
-                if (self.pieces[14].x, self.pieces[14].y) in moves and sprite.color == "WHITE":
+                if (self.pieces[self.black_king_index].x, self.pieces[self.black_king_index].y) in moves and sprite.color == "WHITE":
                     check = True
                     self.check_color = "WHITE"
-                if (self.pieces[20].x, self.pieces[20].y) in moves and sprite.color == "BLACK":
+                if (self.pieces[self.white_king_index].x, self.pieces[self.white_king_index].y) in moves and sprite.color == "BLACK":
                     check = True
                     self.check_color = "BLACK"
 
