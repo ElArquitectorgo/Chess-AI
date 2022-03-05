@@ -297,23 +297,19 @@ class Chess(Game):
 
             if curr_sprite.image == self.img_king_w:
                 if curr_sprite.x == 4 and pos_x == 6:
-                    if self.pieces[-1].x == 7 and self.pieces[-1].y == 7:
                         self.pieces[-1].set_pos(5, 7)
                         self.tablero[7][7] = ""
                         self.tablero[5][7] = "R"
                 elif curr_sprite.x == 4 and pos_x == 2:
-                    if self.pieces[4].x == 0 and self.pieces[4].y == 7:
                         self.pieces[4].set_pos(3, 7)
                         self.tablero[0][7] = ""
                         self.tablero[3][7] = "R"
             elif curr_sprite.image == self.img_king_b:
                 if curr_sprite.x == 4 and pos_x == 6:
-                    if self.pieces[-4].x == 7 and self.pieces[-4].y == 0:
                         self.pieces[-4].set_pos(5, 0)
                         self.tablero[7][0] = ""
                         self.tablero[5][0] = "R"
                 elif curr_sprite.x == 4 and pos_x == 2:
-                    if self.pieces[0].x == 0 and self.pieces[0].y == 0:
                         self.pieces[0].set_pos(3, 0)
                         self.tablero[0][0] = ""
                         self.tablero[3][0] = "R"
