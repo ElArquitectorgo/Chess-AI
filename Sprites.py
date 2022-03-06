@@ -256,20 +256,20 @@ class King(Piece):
         #Enroque
         if self.game.castling != "-":
             for c in self.game.castling:
-                if c == "K" and self.color == "WHITE":
-                    if self.game.pieces[-1].x == 7 and self.game.pieces[-1].y == 7:
+                if c == "K" and self.color == "WHITE" and self.game.white_rook_ks is not None:
+                    if self.game.pieces[self.game.white_rook_ks].x == 7 and self.game.pieces[self.game.white_rook_ks].y == 7:
                         if self.game.tablero[6][7] == "" and self.game.tablero[5][7] == "":
                             self.valid_moves.append((6, 7))
-                elif c == "Q" and self.color == "WHITE":
-                    if self.game.pieces[4].x == 0 and self.game.pieces[4].y == 7:
+                elif c == "Q" and self.color == "WHITE" and self.game.white_rook_qs is not None:
+                    if self.game.pieces[self.game.white_rook_qs].x == 0 and self.game.pieces[self.game.white_rook_qs].y == 7:
                         if self.game.tablero[1][7] == "" and self.game.tablero[2][7] == "" and self.game.tablero[3][7] == "":
                             self.valid_moves.append((2, 7))
-                elif c == "k" and self.color == "BLACK":
-                    if self.game.pieces[-4].x == 7 and self.game.pieces[-4].y == 0:
+                elif c == "k" and self.color == "BLACK" and self.game.black_rook_ks is not None:
+                    if self.game.pieces[self.game.black_rook_ks].x == 7 and self.game.pieces[self.game.black_rook_ks].y == 0:
                         if self.game.tablero[6][0] == "" and self.game.tablero[5][0] == "":
                             self.valid_moves.append((6, 0))
-                elif c == "q" and self.color == "BLACK":
-                    if self.game.pieces[0].x == 0 and self.game.pieces[0].y == 0:
+                elif c == "q" and self.color == "BLACK" and self.game.black_rook_qs is not None:
+                    if self.game.pieces[self.game.black_rook_qs].x == 0 and self.game.pieces[self.game.black_rook_qs].y == 0:
                         if self.game.tablero[1][0] == "" and self.game.tablero[2][0] == "" and self.game.tablero[3][0] == "":
                             self.valid_moves.append((2, 0))
                             

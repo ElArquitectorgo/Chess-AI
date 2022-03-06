@@ -47,13 +47,28 @@ class Chess(Game):
 
         position1 = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
         position2 = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -"
+        # Para 1 ok, 2 me sale 2043 y debería ser 2039
         position3 = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - -"
         position4 = "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
+        # Para 1 y 2 ok, 3 me sale 9 551 y debería ser 9 467
         position5 = "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8"
+        # Para 1 y 2 ok, 3 me sale 62 445 y debería ser 62 379
         position6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"
 
+        tablero = self.read_FEN_notation(position2)
+    
+        self.create_tablero(tablero)
+        
+        positions = []
+        for p in self.pieces:
+            positions.append((p.x, p.y))
+
+        self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
+        self.run()
+
+    def read_FEN_notation(self, position):
         tablero = [["" for i in range(8)] for j in range(8)]
-        str = (position2).split("/")
+        str = (position).split("/")
         for i in range(8):
             data = str[i]
             if i == 7:
@@ -74,27 +89,17 @@ class Chess(Game):
                 tablero[i][cnt] = c
                 cnt += 1
 
-        # Para 1 ok, 2 me sale 2043 y debería ser 2039
-
-        # Para 1 y 2 ok, 3 me sale 9 551 y debería ser 9 467
-
-        # Para 1 y 2 ok, 3 me sale 62 445 y debería ser 62 379
-
-        # Para 1, 2 y 3 va perfe
-    
-        self.create_tablero(tablero)
-        
-        positions = []
-        for p in self.pieces:
-            positions.append((p.x, p.y))
-
-        self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
-        self.run()
+        return tablero
 
     def create_tablero(self, tablero):
         """Método auxiliar para crear tableros personalizados."""
 
         self.tablero = [["" for i in range(8)] for j in range(8)]
+
+        self.black_rook_qs = None
+        self.black_rook_ks = None
+        self.white_rook_qs = None
+        self.white_rook_ks = None
 
         for i in range(8):
             for j in range(8):
@@ -104,6 +109,10 @@ class Chess(Game):
                 elif tablero[j][i] == "r":
                     self.pieces.append(Rook(self, "BLACK", self.img_rook_b, -50, i, j))
                     self.tablero[i][j] = "R"
+                    if i == 0 and j == 0:
+                        self.black_rook_qs = len(self.pieces) - 1
+                    elif i == 7 and j == 0:
+                        self.black_rook_ks = len(self.pieces) - 1
                 elif tablero[j][i] == "n":
                     self.pieces.append(Knight(self, "BLACK", self.img_knight_b, -30, i, j))
                     self.tablero[i][j] = "N"
@@ -124,6 +133,10 @@ class Chess(Game):
                 elif tablero[j][i] == "R":
                     self.pieces.append(Rook(self, "WHITE", self.img_rook_w, 50, i, j))
                     self.tablero[i][j] = "R"
+                    if i == 0 and j == 7:
+                        self.white_rook_qs = len(self.pieces) - 1
+                    elif i == 7 and j == 7:
+                        self.white_rook_ks = len(self.pieces) - 1
                 elif tablero[j][i] == "N":
                     self.pieces.append(Knight(self, "WHITE", self.img_knight_w, 30, i, j))
                     self.tablero[i][j] = "N"
@@ -297,20 +310,20 @@ class Chess(Game):
 
             if curr_sprite.image == self.img_king_w:
                 if curr_sprite.x == 4 and pos_x == 6:
-                        self.pieces[-1].set_pos(5, 7)
+                        self.pieces[self.white_rook_ks].set_pos(5, 7)
                         self.tablero[7][7] = ""
                         self.tablero[5][7] = "R"
                 elif curr_sprite.x == 4 and pos_x == 2:
-                        self.pieces[4].set_pos(3, 7)
+                        self.pieces[self.white_rook_qs].set_pos(3, 7)
                         self.tablero[0][7] = ""
                         self.tablero[3][7] = "R"
             elif curr_sprite.image == self.img_king_b:
                 if curr_sprite.x == 4 and pos_x == 6:
-                        self.pieces[-4].set_pos(5, 0)
+                        self.pieces[self.black_rook_ks].set_pos(5, 0)
                         self.tablero[7][0] = ""
                         self.tablero[5][0] = "R"
                 elif curr_sprite.x == 4 and pos_x == 2:
-                        self.pieces[0].set_pos(3, 0)
+                        self.pieces[self.black_rook_qs].set_pos(3, 0)
                         self.tablero[0][0] = ""
                         self.tablero[3][0] = "R"
 
