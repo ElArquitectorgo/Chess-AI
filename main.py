@@ -67,6 +67,8 @@ class Chess(Game):
         self.run()
 
     def read_FEN_notation(self, position):
+        """Crea un tablero partiendo de la notación FEN"""
+
         tablero = [["" for i in range(8)] for j in range(8)]
         str = (position).split("/")
         for i in range(8):
