@@ -57,7 +57,7 @@ class Chess(Game):
         position6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"
         # Para 1, 2 y 3 ok
 
-        tablero = self.read_FEN_notation(position6)
+        tablero = self.read_FEN_notation(position2)
     
         self.create_tablero(tablero)
         
@@ -66,6 +66,9 @@ class Chess(Game):
             positions.append((p.x, p.y))
 
         self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
+        print(self.IA.generate_move(2))
+        print(self.IA.generate_move(3))
+        sys.exit()
         self.run()
 
     def read_FEN_notation(self, position):
@@ -231,10 +234,10 @@ class Chess(Game):
             
             if event.type == pygame.MOUSEBUTTONUP:
                 self.up()
-                print(self.IA.generate_move(1))
-                print(self.IA.generate_move(2))
-                print(self.IA.generate_move(3))
-                print(self.IA.generate_move(4))
+                #print(self.IA.generate_move(1))
+                #print(self.IA.generate_move(2))
+                #print(self.IA.generate_move(3))
+                #print(self.IA.generate_move(4))
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:
