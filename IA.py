@@ -21,11 +21,7 @@ class IA():
                     for move in valid_moves:                    
                         if move[1] == 0 and hasattr(sprite, "promoted") and sprite.promoted[0] == False or move[1] == 7 and hasattr(sprite, "promoted") and sprite.promoted[0] == False:
                             for i in range(4):
-                                self.p += 1
-                                #self.game.draw()
                                 self.game.generate_move(sprite, move[0], move[1], i)
-                                #self.game.draw()
-                                print(self.p)
                                 self.change_color()
 
                                 num_positions += self.generate_move(cnt - 1)
