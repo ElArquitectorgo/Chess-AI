@@ -277,7 +277,7 @@ class King(Piece):
                 if not piece.alive or piece.name == "K" or piece.color == self.color:
                     continue
 
-                v_moves = piece.get_valid_moves(piece.x, piece.y)
+                v_moves = piece.get_valid_moves(int(piece.x), int(piece.y))
                 for move in v_moves:
                     if move[0] == 3 and move[1] == 0 and (2, 0) in self.valid_moves:
                         self.valid_moves.remove((2, 0))
