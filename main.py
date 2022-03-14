@@ -48,11 +48,11 @@ class Chess(Game):
 
         position1 = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
         position2 = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -"
-        # Para 1 y 2 ok, 3 me sale 97 895 y debería ser 97862
+        # Para 1 y 2 ok, 3 me sale 97 895 y debería ser 97 862
         position3 = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - -"
         # Para 1, 2 y 3 ok, 4 me sale 43 244 y debería ser 43 238
         position4 = "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
-        # Para 1 y 2 ok, 3 me sale 9 551 y debería ser 9 467
+        # Para 1 y 2 ok, 3 me sale 9 469 y debería ser 9 467
         position5 = "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8"
         # Para 1 y 2 ok, 3 me sale 62 478 y debería ser 62 379
         position6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"
@@ -235,7 +235,7 @@ class Chess(Game):
                 self.up()
                 #print(self.IA.generate_move(1))
                 #print(self.IA.generate_move(2))
-                #print(self.IA.generate_move(3))
+                print(self.IA.generate_move(3))
                 #print(self.IA.generate_move(4))
 
             if event.type == pygame.KEYDOWN:
@@ -290,15 +290,18 @@ class Chess(Game):
             if sprite.x == pos_x and sprite.y == pos_y:
                 sprite.set_pos(-10, -10)
                 sprite.alive = False
+                self.kills += 1
             # Comer al paso
             elif curr_sprite.image == self.img_pawn_w and sprite.image == self.img_pawn_b and sprite.y - 1 == pos_y and sprite.x == pos_x and sprite.y == 3:
                     self.tablero[int(sprite.x)][int(sprite.y)] = ""
                     sprite.set_pos(-10, -10)
                     sprite.alive = False
+                    self.kills += 1
             elif curr_sprite.image == self.img_pawn_b and sprite.image == self.img_pawn_w and sprite.y + 1 == pos_y and sprite.x == pos_x and sprite.y == 4:
                     self.tablero[int(sprite.x)][int(sprite.y)] = ""
                     sprite.set_pos(-10, -10)
                     sprite.alive = False
+                    self.kills += 1
         
         self.tablero[int(curr_sprite.x)][int(curr_sprite.y)] = ""
         self.tablero[int(pos_x)][int(pos_y)] = curr_sprite.name

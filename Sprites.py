@@ -81,7 +81,7 @@ class Pawn(Piece):
             # Al paso
             if self.y == 3:
                 for sprite in self.game.pieces:
-                    if sprite.name != "P":
+                    if sprite.name != "P" or sprite.color == self.color:
                         continue
                     elif self.x > 0 and sprite.x == x - 1 and sprite.y == y:
                         if self.is_comible(sprite):
@@ -103,7 +103,7 @@ class Pawn(Piece):
             # Al paso
             if self.y == 4:
                 for sprite in self.game.pieces:
-                    if sprite.name != "P":
+                    if sprite.name != "P" or sprite.color == self.color:
                         continue
                     elif self.x > 0 and sprite.x == x - 1 and sprite.y == y:
                         if self.is_comible(sprite):
