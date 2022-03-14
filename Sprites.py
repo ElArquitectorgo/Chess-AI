@@ -272,7 +272,21 @@ class King(Piece):
                     if self.game.pieces[self.game.black_rook_qs].x == 0 and self.game.pieces[self.game.black_rook_qs].y == 0:
                         if self.game.tablero[1][0] == "" and self.game.tablero[2][0] == "" and self.game.tablero[3][0] == "":
                             self.valid_moves.append((2, 0))
-                            
+
+            for piece in self.game.pieces:
+                if not piece.alive or piece.name == "K" or piece.color == self.color:
+                    continue
+
+                v_moves = piece.get_valid_moves(piece.x, piece.y)
+                for move in v_moves:
+                    if move[0] == 3 and move[1] == 0 and (2, 0) in self.valid_moves:
+                        self.valid_moves.remove((2, 0))
+                    if move[0] == 5 and move[1] == 0 and (6, 0) in self.valid_moves:
+                        self.valid_moves.remove((6, 0))
+                    if move[0] == 3 and move[1] == 7 and (2, 7) in self.valid_moves:
+                        self.valid_moves.remove((2, 7))
+                    if move[0] == 5 and move[1] == 7 and (6, 7) in self.valid_moves:
+                        self.valid_moves.remove((6, 7))
         return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
 
 class Queen(Piece):
