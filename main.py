@@ -513,8 +513,6 @@ class Chess(Game):
         if self.curr_sprite is not None:
             self.screen.blit(self.curr_sprite.image, (self.curr_sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.curr_sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
 
-        #time.sleep(2)
-
         pygame.display.flip()
 
     def draw_tablero(self):
@@ -532,7 +530,7 @@ class Chess(Game):
     def print_tablero(self):
         """Método auxiliar cuyo único propósito es estudiar el comportamiento del tablero."""
 
-        tablero = [["" for i in range(8)] for j in range(8)]
+        tablero = [[" " for i in range(8)] for j in range(8)]
         for i in range(8):
             for j in range(8):
                 tablero[i][j] = self.tablero[j][i]

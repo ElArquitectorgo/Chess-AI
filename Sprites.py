@@ -291,6 +291,7 @@ class King(Piece):
                     if move[0] == 5 and move[1] == 7 or move[0] == 6 and move[1] == 7:
                         if (6, 7) in self.valid_moves:
                             self.valid_moves.remove((6, 7))
+                            
         return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
 
 class Queen(Piece):
