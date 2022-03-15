@@ -44,11 +44,10 @@ class Chess(Game):
         self.click = False
         self.curr_sprite = None
         self.IA = IA(self, "WHITE")
-        self.kills = 0
 
         position1 = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
         position2 = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -"
-        # Para 1 y 2 ok, 3 me sale 97 895 y debería ser 97 862
+        # Para 1 y 2 ok, 3 me sale 97 859 y debería ser 97 862
         position3 = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - -"
         # Para 1, 2 y 3 ok, 4 me sale 43 244 y debería ser 43 238
         position4 = "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
@@ -67,6 +66,7 @@ class Chess(Game):
             positions.append((p.x, p.y))
 
         self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
+        #print(self.IA.generate_move(3))
         #sys.exit()
         self.run()
 
@@ -290,18 +290,15 @@ class Chess(Game):
             if sprite.x == pos_x and sprite.y == pos_y:
                 sprite.set_pos(-10, -10)
                 sprite.alive = False
-                self.kills += 1
             # Comer al paso
             elif curr_sprite.image == self.img_pawn_w and sprite.image == self.img_pawn_b and sprite.y - 1 == pos_y and sprite.x == pos_x and sprite.y == 3:
                     self.tablero[int(sprite.x)][int(sprite.y)] = ""
                     sprite.set_pos(-10, -10)
                     sprite.alive = False
-                    self.kills += 1
             elif curr_sprite.image == self.img_pawn_b and sprite.image == self.img_pawn_w and sprite.y + 1 == pos_y and sprite.x == pos_x and sprite.y == 4:
                     self.tablero[int(sprite.x)][int(sprite.y)] = ""
                     sprite.set_pos(-10, -10)
                     sprite.alive = False
-                    self.kills += 1
         
         self.tablero[int(curr_sprite.x)][int(curr_sprite.y)] = ""
         self.tablero[int(pos_x)][int(pos_y)] = curr_sprite.name
@@ -322,19 +319,24 @@ class Chess(Game):
                         self.pieces[self.white_rook_ks].set_pos(5, 7)
                         self.tablero[7][7] = ""
                         self.tablero[5][7] = "R"
+                        self.kills += 1
                 elif curr_sprite.x == 4 and pos_x == 2:
                         self.pieces[self.white_rook_qs].set_pos(3, 7)
                         self.tablero[0][7] = ""
                         self.tablero[3][7] = "R"
+                        self.kills += 1
             elif curr_sprite.image == self.img_king_b:
                 if curr_sprite.x == 4 and pos_x == 6:
                         self.pieces[self.black_rook_ks].set_pos(5, 0)
                         self.tablero[7][0] = ""
                         self.tablero[5][0] = "R"
+                        self.kills += 1
                 elif curr_sprite.x == 4 and pos_x == 2:
                         self.pieces[self.black_rook_qs].set_pos(3, 0)
                         self.tablero[0][0] = ""
                         self.tablero[3][0] = "R"
+                        self.kills += 1
+
 
         if curr_sprite.name == "R":
             if self.castling != "-":
