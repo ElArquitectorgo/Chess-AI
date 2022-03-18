@@ -57,7 +57,7 @@ class Chess(Game):
         position6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"
         # Para 1, 2 y 3 ok
 
-        tablero = self.read_FEN_notation(position5)
+        tablero = self.read_FEN_notation(position4)
     
         self.create_tablero(tablero)
         
@@ -319,24 +319,19 @@ class Chess(Game):
                         self.pieces[self.white_rook_ks].set_pos(5, 7)
                         self.tablero[7][7] = ""
                         self.tablero[5][7] = "R"
-                        self.kills += 1
                 elif curr_sprite.x == 4 and pos_x == 2:
                         self.pieces[self.white_rook_qs].set_pos(3, 7)
                         self.tablero[0][7] = ""
                         self.tablero[3][7] = "R"
-                        self.kills += 1
             elif curr_sprite.image == self.img_king_b:
                 if curr_sprite.x == 4 and pos_x == 6:
                         self.pieces[self.black_rook_ks].set_pos(5, 0)
                         self.tablero[7][0] = ""
                         self.tablero[5][0] = "R"
-                        self.kills += 1
                 elif curr_sprite.x == 4 and pos_x == 2:
                         self.pieces[self.black_rook_qs].set_pos(3, 0)
                         self.tablero[0][0] = ""
                         self.tablero[3][0] = "R"
-                        self.kills += 1
-
 
         if curr_sprite.name == "R":
             if self.castling != "-":
