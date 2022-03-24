@@ -14,32 +14,48 @@ class IA():
         num_positions = 0
         for sprite in self.game.pieces:
             if sprite.color == self.color and sprite.alive:
-                x = sprite.x
-                y = sprite.y
                 valid_moves = self.game.get_valid_moves(sprite)
-                if valid_moves:
-                    for move in valid_moves:                    
-                        if move[1] == 0 and hasattr(sprite, "promoted") and sprite.promoted[0] == False or move[1] == 7 and hasattr(sprite, "promoted") and sprite.promoted[0] == False:
-                            for i in range(4):
-                                self.game.generate_move(sprite, move[0], move[1], i)
-                                self.change_color()
-
-                                num_positions += self.generate_move(cnt - 1)
-
-                                self.game.backtrack()
-                                self.change_color()
-                        else:        
-                            self.game.generate_move(sprite, move[0], move[1])
-
+                for move in valid_moves:                    
+                    if move[1] == 0 and hasattr(sprite, "promoted") and sprite.promoted[0] == False or move[1] == 7 and hasattr(sprite, "promoted") and sprite.promoted[0] == False:
+                        for i in range(4):
+                            self.game.generate_move(sprite, move[0], move[1], i)
                             self.change_color()
 
                             num_positions += self.generate_move(cnt - 1)
 
                             self.game.backtrack()
                             self.change_color()
+                    else:        
+                        self.game.generate_move(sprite, move[0], move[1])
 
+                        self.change_color()
+
+                        num_positions += self.generate_move(cnt - 1)
+
+                        self.game.backtrack()
+                        self.change_color()
 
         return num_positions
+
+    def generate_move_i(self, cnt):
+        num_positions = 0
+        for piece in self.game.pieces:
+            if piece.color == "WHITE" and piece.alive:
+                valid_moves = self.game.get_valid_moves(piece)
+                for move in valid_moves:
+                    self.game.generate_move(piece, move[0], move[1])
+                    num_positions += 1
+                    for piece_c in self.game.pieces:
+                        if piece_c.color == "BLACK" and piece_c.alive:
+                            valid_moves_c = self.game.get_valid_moves(piece_c)
+                            for move_c in valid_moves_c:
+                                self.game.generate_move(piece_c, move_c[0], move_c[1])
+                                num_positions += 1
+                                self.game.backtrack()
+                    self.game.backtrack()
+
+        return num_positions
+
 
     def change_color(self):
         if self.color == "WHITE":

@@ -57,7 +57,7 @@ class Chess(Game):
         position6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"
         # Para 1, 2 y 3 ok
 
-        tablero = self.read_FEN_notation(position4)
+        tablero = self.read_FEN_notation(position3)
     
         self.create_tablero(tablero)
         
@@ -66,8 +66,9 @@ class Chess(Game):
             positions.append((p.x, p.y))
 
         self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
-        #print(self.IA.generate_move(3))
-        #sys.exit()
+        print(self.IA.generate_move(2))
+        print(self.IA.generate_move_i(2))
+        sys.exit()
         self.run()
 
     def read_FEN_notation(self, position):
@@ -223,7 +224,7 @@ class Chess(Game):
                 sys.exit()
 
             if event.type == pygame.MOUSEMOTION:
-                if self.click == True and self.curr_sprite is not None and 1 == 2:
+                if self.click == True and self.curr_sprite is not None:
                     pos = pygame.mouse.get_pos()
                     self.curr_sprite.set_pos((pos[0] - 65 / 2) / TILE_SIZE, (pos[1] - 65 / 2) / TILE_SIZE)
 
@@ -320,6 +321,7 @@ class Chess(Game):
                         self.tablero[7][7] = ""
                         self.tablero[5][7] = "R"
                 elif curr_sprite.x == 4 and pos_x == 2:
+                        print("helo")
                         self.pieces[self.white_rook_qs].set_pos(3, 7)
                         self.tablero[0][7] = ""
                         self.tablero[3][7] = "R"
@@ -409,7 +411,7 @@ class Chess(Game):
 
             if self.is_check(curr_sprite) and curr_sprite.color != self.check_color:
                 valid_moves_copy.remove(move)
-
+            
             self.backtrack()
             curr_sprite.set_pos(x, y)
 
@@ -509,6 +511,7 @@ class Chess(Game):
             self.screen.blit(self.curr_sprite.image, (self.curr_sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.curr_sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
 
         pygame.display.flip()
+        #time.sleep(5)
 
     def draw_tablero(self):
         """Dibuja un tablero de 8x8 donde cada casilla es de tamaño TILE_SIZE*TILE_SIZE."""
