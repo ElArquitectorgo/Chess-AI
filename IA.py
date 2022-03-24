@@ -39,20 +39,15 @@ class IA():
 
     def generate_move_i(self, cnt):
         num_positions = 0
-        for piece in self.game.pieces:
-            if piece.color == "WHITE" and piece.alive:
-                valid_moves = self.game.get_valid_moves(piece)
-                for move in valid_moves:
-                    self.game.generate_move(piece, move[0], move[1])
-                    num_positions += 1
-                    for piece_c in self.game.pieces:
-                        if piece_c.color == "BLACK" and piece_c.alive:
-                            valid_moves_c = self.game.get_valid_moves(piece_c)
-                            for move_c in valid_moves_c:
-                                self.game.generate_move(piece_c, move_c[0], move_c[1])
-                                num_positions += 1
-                                self.game.backtrack()
-                    self.game.backtrack()
+        while True:
+            for piece in self.game.pieces:
+                if piece.color == self.color and piece.alive:
+                    valid_moves = self.game.get_valid_moves(piece)
+                    for move in valid_moves:
+                        self.game.generate_move(piece, move[0], move[1])
+                        num_positions += 1
+                        self.game.backtrack()
+                        self.change_color()
 
         return num_positions
 
