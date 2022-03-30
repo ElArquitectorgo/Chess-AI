@@ -67,7 +67,6 @@ class Chess(Game):
 
         self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
         print(self.IA.make_move(2))
-        print(self.IA.make_move_i(2))
         sys.exit()
         self.run()
 
