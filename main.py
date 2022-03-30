@@ -66,8 +66,8 @@ class Chess(Game):
             positions.append((p.x, p.y))
 
         self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
-        print(self.IA.generate_move(2))
-        print(self.IA.generate_move_i(2))
+        print(self.IA.make_move(2))
+        print(self.IA.make_move_i(2))
         sys.exit()
         self.run()
 
@@ -234,14 +234,14 @@ class Chess(Game):
             
             if event.type == pygame.MOUSEBUTTONUP:
                 self.up()
-                #print(self.IA.generate_move(1))
-                #print(self.IA.generate_move(2))
-                #print(self.IA.generate_move(3))
-                #print(self.IA.generate_move(4))
+                #print(self.IA.make_move(1))
+                #print(self.IA.make_move(2))
+                #print(self.IA.make_move(3))
+                #print(self.IA.make_move(4))
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:
-                    self.backtrack()
+                    self.unmake_move()
 
     def down(self):
         pos = pygame.mouse.get_pos()
@@ -261,7 +261,7 @@ class Chess(Game):
         pos_x = pos[0] // TILE_SIZE
         pos_y = pos[1] // TILE_SIZE
         if (pos_x, pos_y) in self.valid_moves:
-            self.generate_move(self.curr_sprite, pos_x, pos_y)
+            self.make_move(self.curr_sprite, pos_x, pos_y)
 
         elif self.curr_sprite is not None:
             self.curr_sprite.set_pos(self.curr_pos_x, self.curr_pos_y)
@@ -270,7 +270,7 @@ class Chess(Game):
         self.check_tablero()
         self.print_tablero()
 
-    def backtrack(self):
+    def unmake_move(self):
         """Vuelve al estado anterior del tablero actual."""
 
         if self.turn == 1:
@@ -281,7 +281,7 @@ class Chess(Game):
         self.chess_position_dict.popitem()
         self.turn -= 1
 
-    def generate_move(self, curr_sprite, pos_x, pos_y, promote=0):
+    def make_move(self, curr_sprite, pos_x, pos_y, promote=0):
         """Genera el movimiento de la pieza dada como parámetro."""
 
         if self.tablero[int(pos_x)][int(pos_y)] == "K":
@@ -407,12 +407,12 @@ class Chess(Game):
         x, y = curr_sprite.x, curr_sprite.y
 
         for move in valid_moves:
-            self.generate_move(curr_sprite, move[0], move[1])
+            self.make_move(curr_sprite, move[0], move[1])
 
             if self.is_check(curr_sprite) and curr_sprite.color != self.check_color:
                 valid_moves_copy.remove(move)
             
-            self.backtrack()
+            self.unmake_move()
             curr_sprite.set_pos(x, y)
 
         self.curr_sprite = curr_sprite

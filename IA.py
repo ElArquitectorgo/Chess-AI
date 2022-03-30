@@ -6,7 +6,7 @@ class IA():
         self.level = level
         self.p = 0
 
-    def generate_move(self, cnt):
+    def make_move(self, cnt):
         #self.game.draw()
         if cnt == 0:
             return 1
@@ -18,21 +18,21 @@ class IA():
                 for move in valid_moves:                    
                     if move[1] == 0 and hasattr(sprite, "promoted") and sprite.promoted[0] == False or move[1] == 7 and hasattr(sprite, "promoted") and sprite.promoted[0] == False:
                         for i in range(4):
-                            self.game.generate_move(sprite, move[0], move[1], i)
+                            self.game.make_move(sprite, move[0], move[1], i)
                             self.change_color()
 
-                            num_positions += self.generate_move(cnt - 1)
+                            num_positions += self.make_move(cnt - 1)
 
-                            self.game.backtrack()
+                            self.game.unmake_move()
                             self.change_color()
                     else:        
-                        self.game.generate_move(sprite, move[0], move[1])
+                        self.game.make_move(sprite, move[0], move[1])
 
                         self.change_color()
 
-                        num_positions += self.generate_move(cnt - 1)
+                        num_positions += self.make_move(cnt - 1)
 
-                        self.game.backtrack()
+                        self.game.unmake_move()
                         self.change_color()
 
         return num_positions
