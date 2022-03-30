@@ -108,8 +108,7 @@ class Pawn(Piece):
                     elif self.x > 0 and sprite.x == x - 1 and sprite.y == y:
                         if self.is_comible(sprite):
                             self.valid_moves.append((x - 1, y + 1))
-
-                    elif self. x < 7 and sprite.x == x + 1 and sprite.y == y:
+                    elif self.x < 7 and sprite.x == x + 1 and sprite.y == y:
                         if self.is_comible(sprite):
                             self.valid_moves.append((x + 1, y + 1))
                                 

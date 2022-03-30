@@ -66,8 +66,6 @@ class Chess(Game):
             positions.append((p.x, p.y))
 
         self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
-        print(self.IA.make_move(2))
-        sys.exit()
         self.run()
 
     def read_FEN_notation(self, position):
@@ -252,6 +250,7 @@ class Chess(Game):
                 if sprite.color == "WHITE" and self.turn % 2 == 1 or sprite.color == "BLACK" and self.turn % 2 == 0:
                 #if self.curr_sprite.color == "WHITE" and self.turn % 2 == 1:
                     self.valid_moves = self.get_valid_moves(sprite)
+                    print(self.curr_sprite.x, self.curr_sprite.y)
         self.click = True
 
     def up(self):
@@ -320,7 +319,6 @@ class Chess(Game):
                         self.tablero[7][7] = ""
                         self.tablero[5][7] = "R"
                 elif curr_sprite.x == 4 and pos_x == 2:
-                        print("helo")
                         self.pieces[self.white_rook_qs].set_pos(3, 7)
                         self.tablero[0][7] = ""
                         self.tablero[3][7] = "R"
