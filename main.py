@@ -67,8 +67,10 @@ class Chess(Game):
             positions.append((p.x, p.y))
 
         self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
-        print(self.IA.make_move(4))
-        sys.exit()
+        
+        #print(self.IA.make_move(4))
+        #sys.exit()
+        
         self.run()
 
     def read_FEN_notation(self, position):
