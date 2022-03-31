@@ -228,8 +228,8 @@ class Chess(Game):
             if event.type == pygame.MOUSEMOTION:
                 if self.click == True and self.curr_sprite is not None:
                     pos = pygame.mouse.get_pos()
-                    self.pos_x = (pos[0] - 65 / 2) / TILE_SIZE
-                    self.pos_y = (pos[1] - 65 / 2) / TILE_SIZE
+                    self.mouse_pos_x = (pos[0] - 65 / 2) / TILE_SIZE
+                    self.mouse_pos_y = (pos[1] - 65 / 2) / TILE_SIZE
                     #self.curr_sprite.set_pos((pos[0] - 65 / 2) / TILE_SIZE, (pos[1] - 65 / 2) / TILE_SIZE)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -251,8 +251,8 @@ class Chess(Game):
         pos = pygame.mouse.get_pos()
         self.curr_pos_x = pos[0] // TILE_SIZE
         self.curr_pos_y = pos[1] // TILE_SIZE
-        self.pos_x = self.curr_pos_x
-        self.pos_y = self.curr_pos_y
+        self.mouse_pos_x = self.curr_pos_x
+        self.mouse_pos_y = self.curr_pos_y
         for sprite in self.pieces:
             if sprite.x == self.curr_pos_x and sprite.y == self.curr_pos_y:
                 self.curr_sprite = sprite
@@ -513,7 +513,7 @@ class Chess(Game):
             pygame.draw.circle(self.screen, (132, 255, 96), (ele[0] * TILE_SIZE + TILE_SIZE / 2, ele[1] * TILE_SIZE + TILE_SIZE / 2), 15, 0)
 
         if self.curr_sprite is not None:
-            self.screen.blit(self.curr_sprite.image, (self.pos_x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.pos_y * TILE_SIZE + (TILE_SIZE - 65) / 2))
+            self.screen.blit(self.curr_sprite.image, (self.mouse_pos_x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.mouse_pos_y * TILE_SIZE + (TILE_SIZE - 65) / 2))
 
         pygame.display.flip()
         #time.sleep(5)
