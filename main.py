@@ -1,3 +1,4 @@
+import math
 import time
 import pygame, sys
 from game import Game
@@ -66,6 +67,8 @@ class Chess(Game):
             positions.append((p.x, p.y))
 
         self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
+        print(self.IA.make_move(4))
+        sys.exit()
         self.run()
 
     def read_FEN_notation(self, position):
@@ -223,7 +226,9 @@ class Chess(Game):
             if event.type == pygame.MOUSEMOTION:
                 if self.click == True and self.curr_sprite is not None:
                     pos = pygame.mouse.get_pos()
-                    self.curr_sprite.set_pos((pos[0] - 65 / 2) / TILE_SIZE, (pos[1] - 65 / 2) / TILE_SIZE)
+                    self.pos_x = (pos[0] - 65 / 2) / TILE_SIZE
+                    self.pos_y = (pos[1] - 65 / 2) / TILE_SIZE
+                    #self.curr_sprite.set_pos((pos[0] - 65 / 2) / TILE_SIZE, (pos[1] - 65 / 2) / TILE_SIZE)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.down()
@@ -244,13 +249,14 @@ class Chess(Game):
         pos = pygame.mouse.get_pos()
         self.curr_pos_x = pos[0] // TILE_SIZE
         self.curr_pos_y = pos[1] // TILE_SIZE
+        self.pos_x = self.curr_pos_x
+        self.pos_y = self.curr_pos_y
         for sprite in self.pieces:
             if sprite.x == self.curr_pos_x and sprite.y == self.curr_pos_y:
                 self.curr_sprite = sprite
                 if sprite.color == "WHITE" and self.turn % 2 == 1 or sprite.color == "BLACK" and self.turn % 2 == 0:
                 #if self.curr_sprite.color == "WHITE" and self.turn % 2 == 1:
                     self.valid_moves = self.get_valid_moves(sprite)
-                    print(self.curr_sprite.x, self.curr_sprite.y)
         self.click = True
 
     def up(self):
@@ -299,7 +305,7 @@ class Chess(Game):
                     sprite.set_pos(-10, -10)
                     sprite.alive = False
         
-        self.tablero[int(curr_sprite.x)][int(curr_sprite.y)] = ""
+        self.tablero[int(math.trunc(curr_sprite.x))][int(math.trunc(curr_sprite.y))] = ""
         self.tablero[int(pos_x)][int(pos_y)] = curr_sprite.name
 
         # Perder enroque
@@ -505,7 +511,7 @@ class Chess(Game):
             pygame.draw.circle(self.screen, (132, 255, 96), (ele[0] * TILE_SIZE + TILE_SIZE / 2, ele[1] * TILE_SIZE + TILE_SIZE / 2), 15, 0)
 
         if self.curr_sprite is not None:
-            self.screen.blit(self.curr_sprite.image, (self.curr_sprite.x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.curr_sprite.y * TILE_SIZE + (TILE_SIZE - 65) / 2))
+            self.screen.blit(self.curr_sprite.image, (self.pos_x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.pos_y * TILE_SIZE + (TILE_SIZE - 65) / 2))
 
         pygame.display.flip()
         #time.sleep(5)
