@@ -230,7 +230,6 @@ class Chess(Game):
                     pos = pygame.mouse.get_pos()
                     self.mouse_pos_x = (pos[0] - 65 / 2) / TILE_SIZE
                     self.mouse_pos_y = (pos[1] - 65 / 2) / TILE_SIZE
-                    #self.curr_sprite.set_pos((pos[0] - 65 / 2) / TILE_SIZE, (pos[1] - 65 / 2) / TILE_SIZE)
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.down()
