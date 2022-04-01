@@ -7,7 +7,6 @@ class IA():
         self.p = 0
 
     def make_move(self, cnt):
-        #self.game.draw()
         if cnt == 0:
             return 1
 

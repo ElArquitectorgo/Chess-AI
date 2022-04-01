@@ -268,8 +268,9 @@ class Chess(Game):
         pos_y = pos[1] // TILE_SIZE
         if (pos_x, pos_y) in self.valid_moves:
             self.make_move(self.curr_sprite, pos_x, pos_y)
-
         elif self.curr_sprite is not None:
+            self.mouse_pos_x = self.curr_pos_x
+            self.mouse_pos_y = self.curr_pos_y
             self.curr_sprite.set_pos(self.curr_pos_x, self.curr_pos_y)
 
         self.valid_moves.clear()
