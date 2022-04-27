@@ -58,7 +58,7 @@ class Chess(Game):
         position6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"
         # Para 1, 2 y 3 ok
 
-        tablero = self.read_FEN_notation(position3)
+        tablero = self.read_FEN_notation(position1)
     
         self.create_tablero(tablero)
         
@@ -68,7 +68,7 @@ class Chess(Game):
 
         self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
         
-        #print(self.IA.make_move(4))
+        #print(self.IA.make_move(3))
         #sys.exit()
         
         self.run()
@@ -272,6 +272,7 @@ class Chess(Game):
             self.mouse_pos_y = self.curr_pos_y
             self.curr_sprite.set_pos(self.curr_pos_x, self.curr_pos_y)
 
+        self.curr_sprite = None
         self.valid_moves.clear()
         self.check_tablero()
         self.print_tablero()
@@ -500,6 +501,9 @@ class Chess(Game):
             elif self.turn % 2 == 1 and self.is_checkmate("WHITE"):
                 print("Jaque mate, ganan las negras")
                 self.new()
+
+            # El método is_clavada me cambia el curr_sprite    
+            self.curr_sprite = None
 
     def draw(self):
         """Dibuja en pantalla los elementos del juego."""
