@@ -233,25 +233,6 @@ class King(Piece):
 
     def get_valid_moves(self, x, y):
         self.valid_moves = list()
-        #Arribas
-        if x - 1 >= 0 and y - 1 >= 0:
-            self.valid_moves.append((x - 1, y - 1))
-        if y - 1 >= 0:
-            self.valid_moves.append((x, y - 1))
-        if x + 1 < 8 and y - 1 >= 0:
-            self.valid_moves.append((x + 1, y - 1))
-        #Abajos
-        if x - 1 >= 0 and y + 1 < 8:
-            self.valid_moves.append((x - 1, y + 1))
-        if y + 1 < 8:
-            self.valid_moves.append((x, y + 1))
-        if x + 1 < 8 and y + 1 < 8:
-            self.valid_moves.append((x + 1, y + 1))
-        #Horizontal
-        if x - 1 >= 0:
-            self.valid_moves.append((x - 1, y))
-        if x + 1 < 8:
-            self.valid_moves.append((x + 1, y))
         #Enroque
         if self.game.castling != "-":
             for c in self.game.castling:
@@ -275,7 +256,6 @@ class King(Piece):
             for piece in self.game.pieces:
                 if not piece.alive or piece.name == "K" or piece.color == self.color:
                     continue
-                
                 v_moves = piece.get_valid_moves(int(piece.x), int(piece.y))
                 for move in v_moves:
                     if move[0] == 2 and move[1] == 0 or move[0] == 3 and move[1] == 0:
@@ -290,7 +270,27 @@ class King(Piece):
                     if move[0] == 5 and move[1] == 7 or move[0] == 6 and move[1] == 7:
                         if (6, 7) in self.valid_moves:
                             self.valid_moves.remove((6, 7))
-                            
+
+        #Arribas
+        if x - 1 >= 0 and y - 1 >= 0:
+            self.valid_moves.append((x - 1, y - 1))
+        if y - 1 >= 0:
+            self.valid_moves.append((x, y - 1))
+        if x + 1 < 8 and y - 1 >= 0:
+            self.valid_moves.append((x + 1, y - 1))
+        #Abajos
+        if x - 1 >= 0 and y + 1 < 8:
+            self.valid_moves.append((x - 1, y + 1))
+        if y + 1 < 8:
+            self.valid_moves.append((x, y + 1))
+        if x + 1 < 8 and y + 1 < 8:
+            self.valid_moves.append((x + 1, y + 1))
+        #Horizontal
+        if x - 1 >= 0:
+            self.valid_moves.append((x - 1, y))
+        if x + 1 < 8:
+            self.valid_moves.append((x + 1, y))
+
         return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
 
 class Queen(Piece):
