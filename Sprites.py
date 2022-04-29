@@ -1,27 +1,6 @@
 
 from abc import ABC, abstractmethod
 
-def get_real_valid_moves(pieces, color, valid_moves):
-    """Elimina de la lista dada todas aquellas casillas en las que hay
-        una pieza del mismo color que la pieza que llama a este método."""
-
-    valid_moves_copy = valid_moves.copy()
-    for pt in valid_moves:
-        if is_same_color(pieces, color, pt[0], pt[1]):
-            valid_moves_copy.remove(pt)
-
-    return valid_moves_copy
-
-def is_same_color(pieces, color, x, y):
-    """Comprueba si la pieza en la posición dada es del mismo color
-        que la pieza que llama a este método."""
-
-    for piece in pieces:
-        if piece.x == x and piece.y == y:
-            if piece.color == color:
-                return True
-    return False
-
 class Piece(ABC):
     def __init__(self, game, color, image, value, x, y):
         self.game = game
@@ -75,9 +54,11 @@ class Pawn(Piece):
                 if y == 6 and self.game.tablero[x][y - 2] == "":
                     self.valid_moves.append((x, y - 2))
             if y - 1 >= 0 and x - 1 >= 0 and not self.game.tablero[x - 1][y - 1] == "":
-                self.valid_moves.append((x - 1, y - 1))
+                if not self.game.tablero[x - 1][y - 1].isupper():
+                    self.valid_moves.append((x - 1, y - 1))
             if y - 1 >= 0 and x + 1 < 8 and not self.game.tablero[x + 1][y - 1] == "":
-                self.valid_moves.append((x + 1, y - 1))
+                if not self.game.tablero[x + 1][y - 1].isupper():
+                    self.valid_moves.append((x + 1, y - 1))
             # Al paso
             if self.y == 3:
                 for sprite in self.game.pieces:
@@ -97,9 +78,11 @@ class Pawn(Piece):
                 if y == 1 and self.game.tablero[x][y + 2] == "":
                     self.valid_moves.append((x, y + 2))
             if y + 1 < 8 and x - 1 >= 0 and not self.game.tablero[x - 1][y + 1] == "":
-                self.valid_moves.append((x - 1, y + 1))
+                if self.game.tablero[x - 1][y + 1].isupper():
+                    self.valid_moves.append((x - 1, y + 1))
             if y + 1 < 8 and x + 1 < 8 and not self.game.tablero[x + 1][y + 1] == "":
-                self.valid_moves.append((x + 1, y + 1))
+                if self.game.tablero[x + 1][y + 1].isupper():
+                    self.valid_moves.append((x + 1, y + 1))
             # Al paso
             if self.y == 4:
                 for sprite in self.game.pieces:
@@ -111,8 +94,8 @@ class Pawn(Piece):
                     elif self.x < 7 and sprite.x == x + 1 and sprite.y == y:
                         if self.is_comible(sprite):
                             self.valid_moves.append((x + 1, y + 1))
-                                
-        return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
+
+        return self.valid_moves                        
 
 class Bishop(Piece):
     def __init__(self, game, color, image, value, x, y):
@@ -130,6 +113,10 @@ class Bishop(Piece):
             j +=1
         if i < 8 and j < 8:
             self.valid_moves.append((i, j))
+            if self.game.tablero[i][j] != "":
+                if (self.game.tablero[i][j].isupper() and self.color == "WHITE" or
+                    not self.game.tablero[i][j].isupper() and self.color == "BLACK"):
+                    self.valid_moves.remove((i, j))
         #Abajo izquierda
         i = x - 1
         j = y + 1;
@@ -139,6 +126,10 @@ class Bishop(Piece):
             j += 1
         if i >= 0 and j < 8:
             self.valid_moves.append((i, j))
+            if self.game.tablero[i][j] != "":
+                if (self.game.tablero[i][j].isupper() and self.color == "WHITE" or
+                    not self.game.tablero[i][j].isupper() and self.color == "BLACK"):
+                    self.valid_moves.remove((i, j))
         #Arriba derecha
         i = x + 1
         j = y - 1
@@ -148,6 +139,10 @@ class Bishop(Piece):
             j -= 1
         if i < 8 and j >= 0:
             self.valid_moves.append((i, j))
+            if self.game.tablero[i][j] != "":
+                if (self.game.tablero[i][j].isupper() and self.color == "WHITE" or
+                    not self.game.tablero[i][j].isupper() and self.color == "BLACK"):
+                    self.valid_moves.remove((i, j))
         #Arriba izquierda
         i = x - 1 
         j = y - 1
@@ -157,8 +152,12 @@ class Bishop(Piece):
             j -= 1
         if i >= 0 and j >= 0:
             self.valid_moves.append((i, j))
+            if self.game.tablero[i][j] != "":
+                if (self.game.tablero[i][j].isupper() and self.color == "WHITE" or
+                    not self.game.tablero[i][j].isupper() and self.color == "BLACK"):
+                    self.valid_moves.remove((i, j))
 
-        return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
+        return self.valid_moves
 
 class Knight(Piece):
     def __init__(self, game, color, image, value, x, y):
@@ -188,7 +187,13 @@ class Knight(Piece):
         if x + 2 < 8 and y + 1 < 8:
             self.valid_moves.append((x + 2, y + 1))
 
-        return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
+        for move in self.valid_moves.copy():
+            if self.game.tablero[move[0]][move[1]] != "":
+                if (self.game.tablero[move[0]][move[1]].isupper() and self.color == "WHITE" or
+                    not self.game.tablero[move[0]][move[1]].isupper() and self.color == "BLACK"):
+                    self.valid_moves.remove(move)
+
+        return self.valid_moves
 
 class Rook(Piece):
     def __init__(self, game, color, image, value, x, y):
@@ -218,11 +223,19 @@ class Rook(Piece):
                     d = True
 
         for i in range(self.left_closer_piece[0], self.right_closer_piece[0] + 1):
-            if i != x and not is_same_color(self.game.pieces, self.color, i, y):
+            if i != x:
                 self.valid_moves.append((i, y))
+                if self.game.tablero[i][y] != "":
+                    if (self.game.tablero[i][y].isupper() and self.color == "WHITE" or
+                        not self.game.tablero[i][y].isupper() and self.color == "BLACK"):
+                        self.valid_moves.remove((i, y))
         for j in range(self.up_closer_piece[1], self.down_closer_piece[1] + 1):
-            if j != y and not is_same_color(self.game.pieces, self.color, x, j):
+            if j != y:
                 self.valid_moves.append((x, j))
+                if self.game.tablero[x][j] != "":
+                    if (self.game.tablero[x][j].isupper() and self.color == "WHITE" or
+                        not self.game.tablero[x][j].isupper() and self.color == "BLACK"):
+                        self.valid_moves.remove((x, j))
 
         return self.valid_moves
 
@@ -291,7 +304,13 @@ class King(Piece):
         if x + 1 < 8:
             self.valid_moves.append((x + 1, y))
 
-        return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
+        for move in self.valid_moves.copy():
+            if self.game.tablero[move[0]][move[1]] != "":
+                if (self.game.tablero[move[0]][move[1]].isupper() and self.color == "WHITE" or
+                    not self.game.tablero[move[0]][move[1]].isupper() and self.color == "BLACK"):
+                    self.valid_moves.remove(move)
+
+        return self.valid_moves
 
 class Queen(Piece):
     def __init__(self, game, color, image, value, x, y):
@@ -300,6 +319,7 @@ class Queen(Piece):
 
     def get_valid_moves(self, x, y):
         self.valid_moves = list()
+
         self.left_closer_piece = (0, y)
         self.right_closer_piece = (7, y)
         self.up_closer_piece = (x, 0)
@@ -321,11 +341,20 @@ class Queen(Piece):
                     d = True
 
         for i in range(self.left_closer_piece[0], self.right_closer_piece[0] + 1):
-            if i != x and not is_same_color(self.game.pieces, self.color, i, y):
+            if i != x:
                 self.valid_moves.append((i, y))
+                if self.game.tablero[i][y] != "":
+                    if (self.game.tablero[i][y].isupper() and self.color == "WHITE" or
+                        not self.game.tablero[i][y].isupper() and self.color == "BLACK"):
+                        self.valid_moves.remove((i, y))
         for j in range(self.up_closer_piece[1], self.down_closer_piece[1] + 1):
-            if j != y and not is_same_color(self.game.pieces, self.color, x, j):
+            if j != y:
                 self.valid_moves.append((x, j))
+                if self.game.tablero[x][j] != "":
+                    if (self.game.tablero[x][j].isupper() and self.color == "WHITE" or
+                        not self.game.tablero[x][j].isupper() and self.color == "BLACK"):
+                        self.valid_moves.remove((x, j))
+
         #Abajo derecha
         i = x + 1
         j = y + 1
@@ -335,6 +364,10 @@ class Queen(Piece):
             j +=1
         if i < 8 and j < 8:
             self.valid_moves.append((i, j))
+            if self.game.tablero[i][j] != "":
+                if (self.game.tablero[i][j].isupper() and self.color == "WHITE" or
+                    not self.game.tablero[i][j].isupper() and self.color == "BLACK"):
+                    self.valid_moves.remove((i, j))
         #Abajo izquierda
         i = x - 1
         j = y + 1;
@@ -344,6 +377,10 @@ class Queen(Piece):
             j += 1
         if i >= 0 and j < 8:
             self.valid_moves.append((i, j))
+            if self.game.tablero[i][j] != "":
+                if (self.game.tablero[i][j].isupper() and self.color == "WHITE" or
+                    not self.game.tablero[i][j].isupper() and self.color == "BLACK"):
+                    self.valid_moves.remove((i, j))
         #Arriba derecha
         i = x + 1
         j = y - 1
@@ -353,6 +390,10 @@ class Queen(Piece):
             j -= 1
         if i < 8 and j >= 0:
             self.valid_moves.append((i, j))
+            if self.game.tablero[i][j] != "":
+                if (self.game.tablero[i][j].isupper() and self.color == "WHITE" or
+                    not self.game.tablero[i][j].isupper() and self.color == "BLACK"):
+                    self.valid_moves.remove((i, j))
         #Arriba izquierda
         i = x - 1 
         j = y - 1
@@ -362,6 +403,9 @@ class Queen(Piece):
             j -= 1
         if i >= 0 and j >= 0:
             self.valid_moves.append((i, j))
-        
-        return get_real_valid_moves(self.game.pieces, self.color, self.valid_moves)
-        
+            if self.game.tablero[i][j] != "":
+                if (self.game.tablero[i][j].isupper() and self.color == "WHITE" or
+                    not self.game.tablero[i][j].isupper() and self.color == "BLACK"):
+                    self.valid_moves.remove((i, j))
+
+        return self.valid_moves

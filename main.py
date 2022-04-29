@@ -38,7 +38,7 @@ class Chess(Game):
 
     def new(self):
         """Crea una nueva partida."""
-
+    
         self.pieces = []
         self.valid_moves = list()
         self.chess_position_dict = dict()
@@ -47,6 +47,7 @@ class Chess(Game):
         self.IA = IA(self, "WHITE")
 
         position1 = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        # Para 1, 2, 3, 4 ok
         position2 = "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq -"
         # Para 1 y 2 ok, 3 me sale 97 859 y debería ser 97 862
         position3 = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - -"
@@ -58,7 +59,7 @@ class Chess(Game):
         position6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"
         # Para 1, 2 y 3 ok
 
-        tablero = self.read_FEN_notation(position5)
+        tablero = self.read_FEN_notation(position1)
     
         self.create_tablero(tablero)
         
@@ -67,9 +68,9 @@ class Chess(Game):
             positions.append((p.x, p.y))
 
         self.chess_position_dict.setdefault(self.turn, (tablero, positions, self.castling))
-        
-        #print(self.IA.make_move(3))
-        #sys.exit()
+
+        print(self.IA.make_move(3))
+        sys.exit()
         
         self.run()
 
@@ -114,26 +115,26 @@ class Chess(Game):
             for j in range(8):
                 if tablero[j][i] == "p":
                     self.pieces.append(Pawn(self, "BLACK", self.img_pawn_b, -10, i, j))
-                    self.tablero[i][j] = "P"
+                    self.tablero[i][j] = "p"
                 elif tablero[j][i] == "r":
                     self.pieces.append(Rook(self, "BLACK", self.img_rook_b, -50, i, j))
-                    self.tablero[i][j] = "R"
+                    self.tablero[i][j] = "r"
                     if i == 0 and j == 0:
                         self.black_rook_qs = len(self.pieces) - 1
                     elif i == 7 and j == 0:
                         self.black_rook_ks = len(self.pieces) - 1
                 elif tablero[j][i] == "n":
                     self.pieces.append(Knight(self, "BLACK", self.img_knight_b, -30, i, j))
-                    self.tablero[i][j] = "N"
+                    self.tablero[i][j] = "n"
                 elif tablero[j][i] == "b":
                     self.pieces.append(Bishop(self, "BLACK", self.img_bishop_b, -30, i, j))
-                    self.tablero[i][j] = "B"
+                    self.tablero[i][j] = "b"
                 elif tablero[j][i] == "q":
                     self.pieces.append(Queen(self, "BLACK", self.img_queen_b, -90, i, j))
-                    self.tablero[i][j] = "Q"
+                    self.tablero[i][j] = "q"
                 elif tablero[j][i] == "k":
                     self.pieces.append(King(self, "BLACK", self.img_king_b, -900, i, j))
-                    self.tablero[i][j] = "K"
+                    self.tablero[i][j] = "k"
                     self.black_king_index = len(self.pieces) - 1
 
                 elif tablero[j][i] == "P":
@@ -168,17 +169,17 @@ class Chess(Game):
         for i in range(8):
             for j in range(8):
                 if tablero[j][i] == "p":
-                    self.tablero[i][j] = "P"
+                    self.tablero[i][j] = "p"
                 elif tablero[j][i] == "r":
-                    self.tablero[i][j] = "R"
+                    self.tablero[i][j] = "r"
                 elif tablero[j][i] == "n":
-                    self.tablero[i][j] = "N"
+                    self.tablero[i][j] = "n"
                 elif tablero[j][i] == "b":
-                    self.tablero[i][j] = "B"
+                    self.tablero[i][j] = "b"
                 elif tablero[j][i] == "q":
-                    self.tablero[i][j] = "Q"
+                    self.tablero[i][j] = "q"
                 elif tablero[j][i] == "k":
-                    self.tablero[i][j] = "K"
+                    self.tablero[i][j] = "k"
 
                 elif tablero[j][i] == "P":
                     self.tablero[i][j] = "P"
@@ -209,13 +210,13 @@ class Chess(Game):
                         self.pieces[i].value = -10
 
                     self.pieces[i].promoted = [False, None, None]
-                    self.pieces[i].name == "P"
-                    self.tablero[int(self.pieces[i].x)][int(self.pieces[i].y)] = "P"
+                    self.pieces[i].name == "P" if self.pieces[i].color == "WHITE" else "p"
+                    self.tablero[int(self.pieces[i].x)][int(self.pieces[i].y)] = "P" if self.pieces[i].color == "WHITE" else "p"
 
             # Por algún lado se me está cambiando y no sé como arreglarlo
             if hasattr(self.pieces[i], "promoted") and not self.pieces[i].promoted[0] and self.pieces[i].name != "P":
-                self.pieces[i].name = "P"
-                self.tablero[int(self.pieces[i].x)][int(self.pieces[i].y)] = "P"
+                self.pieces[i].name = "P" if self.pieces[i].color == "WHITE" else "p"
+                self.tablero[int(self.pieces[i].x)][int(self.pieces[i].y)] = "P" if self.pieces[i].color == "WHITE" else "p"
 
     def events(self):
         """Define los eventos que van a ocurrir en nuestro juego."""
@@ -291,7 +292,7 @@ class Chess(Game):
     def make_move(self, curr_sprite, pos_x, pos_y, promote=0):
         """Genera el movimiento de la pieza dada como parámetro."""
 
-        if self.tablero[int(pos_x)][int(pos_y)] == "K":
+        if self.tablero[int(pos_x)][int(pos_y)] == "K" or self.tablero[int(pos_x)][int(pos_y)] == "k":
             return None
 
         for sprite in self.pieces:
@@ -309,10 +310,10 @@ class Chess(Game):
                     sprite.alive = False
         
         self.tablero[int(math.trunc(curr_sprite.x))][int(math.trunc(curr_sprite.y))] = ""
-        self.tablero[int(pos_x)][int(pos_y)] = curr_sprite.name
+        self.tablero[int(pos_x)][int(pos_y)] = curr_sprite.name if curr_sprite.color == "WHITE" else curr_sprite.name.lower()
 
         # Perder enroque
-        if curr_sprite.name == "K":
+        if curr_sprite.name == "K" or curr_sprite.name == "k":
             if curr_sprite.color == "WHITE":
                 self.castling = self.castling.replace("Q", "")
                 self.castling = self.castling.replace("K", "")
@@ -335,13 +336,13 @@ class Chess(Game):
                 if curr_sprite.x == 4 and pos_x == 6:
                         self.pieces[self.black_rook_ks].set_pos(5, 0)
                         self.tablero[7][0] = ""
-                        self.tablero[5][0] = "R"
+                        self.tablero[5][0] = "r"
                 elif curr_sprite.x == 4 and pos_x == 2:
                         self.pieces[self.black_rook_qs].set_pos(3, 0)
                         self.tablero[0][0] = ""
-                        self.tablero[3][0] = "R"
+                        self.tablero[3][0] = "r"
 
-        if curr_sprite.name == "R":
+        if curr_sprite.name == "R" or curr_sprite.name == "r":
             if self.castling != "-":
                 if curr_sprite.x == 0 and curr_sprite.y == 0:
                     self.castling = self.castling.replace("q", "")
@@ -357,25 +358,25 @@ class Chess(Game):
         # Coronar peón
         if curr_sprite.image == self.img_pawn_w and pos_y == 0 and not curr_sprite.promoted[0] or curr_sprite.image == self.img_pawn_b and pos_y == 7 and not curr_sprite.promoted[0]:
             if promote == 0:
-                curr_sprite.name = "Q"
+                curr_sprite.name = "Q" if curr_sprite.color == "WHITE" else "q"
                 curr_sprite.image = self.img_queen_w if curr_sprite.color == "WHITE" else self.img_queen_b
                 curr_sprite.value = 90 if curr_sprite.color == "WHITE" else -90
-                self.tablero[int(pos_x)][int(pos_y)] = "Q"
+                self.tablero[int(pos_x)][int(pos_y)] = "Q" if curr_sprite.color == "WHITE" else "q"
             if promote == 1:
-                curr_sprite.name = "R"
+                curr_sprite.name = "R" if curr_sprite.color == "WHITE" else "r"
                 curr_sprite.image = self.img_rook_w if curr_sprite.color == "WHITE" else self.img_rook_b
                 curr_sprite.value = 50 if curr_sprite.color == "WHITE" else -50
-                self.tablero[int(pos_x)][int(pos_y)] = "R"
+                self.tablero[int(pos_x)][int(pos_y)] = "R" if curr_sprite.color == "WHITE" else "r"
             if promote == 2:
-                curr_sprite.name = "N"
+                curr_sprite.name = "N" if curr_sprite.color == "WHITE" else "n"
                 curr_sprite.image = self.img_knight_w if curr_sprite.color == "WHITE" else self.img_knight_b
                 curr_sprite.value = 30 if curr_sprite.color == "WHITE" else -30
-                self.tablero[int(pos_x)][int(pos_y)] = "N"
+                self.tablero[int(pos_x)][int(pos_y)] = "N" if curr_sprite.color == "WHITE" else "n"
             if promote == 3:
-                curr_sprite.name = "B"
+                curr_sprite.name = "B" if curr_sprite.color == "WHITE" else "b"
                 curr_sprite.image = self.img_bishop_w if curr_sprite.color == "WHITE" else self.img_bishop_b
                 curr_sprite.value = 30 if curr_sprite.color == "WHITE" else -30
-                self.tablero[int(pos_x)][int(pos_y)] = "B"
+                self.tablero[int(pos_x)][int(pos_y)] = "B" if curr_sprite.color == "WHITE" else "b"
 
             curr_sprite.promoted = [True, promote, self.turn + 1]
             
