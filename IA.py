@@ -1,11 +1,10 @@
 import functools
 
 class IA():
-    def __init__(self, game, color, level=1):
+    def __init__(self, game, color):
         self.game = game
         self.color = color
-        self.level = level
-        self.p = 0
+
     @functools.lru_cache
     def make_move(self, cnt):
         if cnt == 0:
