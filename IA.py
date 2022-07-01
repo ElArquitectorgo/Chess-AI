@@ -1,3 +1,4 @@
+import functools
 
 class IA():
     def __init__(self, game, color, level=1):
@@ -5,7 +6,7 @@ class IA():
         self.color = color
         self.level = level
         self.p = 0
-
+    @functools.lru_cache
     def make_move(self, cnt):
         if cnt == 0:
             return 1

@@ -55,11 +55,11 @@ class Chess(Game):
         position4 = "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1"
         # Para 1 y 2 ok, 3 me sale 9 469 y debería ser 9 467
         position5 = "rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8"
-        # Para 1 y 2 ok, 3 me sale 62 478 y debería ser 62 379
+        # Para 1, 2 y 3 ok
         position6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"
         # Para 1, 2 y 3 ok
 
-        tablero = self.read_FEN_notation(position3)
+        tablero = self.read_FEN_notation(position6)
     
         self.create_tablero(tablero)
         
@@ -423,6 +423,15 @@ class Chess(Game):
             curr_sprite.set_pos(x, y)
 
         self.curr_sprite = curr_sprite
+
+        if curr_sprite.name == "K" and self.castling != "-" and curr_sprite.x == 4:
+            if self.is_check(curr_sprite):
+                if curr_sprite.color == "BLACK":
+                    if (2, 0) in valid_moves: valid_moves_copy.remove((2, 0))
+                    if (6, 0) in valid_moves: valid_moves_copy.remove((6, 0))
+                elif curr_sprite.color == "WHITE":
+                    if (2, 7) in valid_moves: valid_moves_copy.remove((2, 7))
+                    if (6, 7) in valid_moves: valid_moves_copy.remove((6, 7))
 
         return valid_moves_copy
 
