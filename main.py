@@ -1,5 +1,4 @@
 import math
-import time
 import pygame, sys
 from game import Game
 from Sprites import *
@@ -59,7 +58,7 @@ class Chess(Game):
         position6 = "r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10"
         # Para 1, 2 y 3 ok
 
-        tablero = self.read_FEN_notation(position6)
+        tablero = self.read_FEN_notation(position3)
     
         self.create_tablero(tablero)
         
@@ -424,6 +423,7 @@ class Chess(Game):
 
         self.curr_sprite = curr_sprite
 
+        # Si un rey está en jaque no puede enrocar.
         if curr_sprite.name == "K" and self.castling != "-" and curr_sprite.x == 4:
             if self.is_check(curr_sprite):
                 if curr_sprite.color == "BLACK":
@@ -530,7 +530,6 @@ class Chess(Game):
             self.screen.blit(self.curr_sprite.image, (self.mouse_pos_x * TILE_SIZE + (TILE_SIZE - 65) / 2, self.mouse_pos_y * TILE_SIZE + (TILE_SIZE - 65) / 2))
 
         pygame.display.flip()
-        #time.sleep(5)
 
     def draw_tablero(self):
         """Dibuja un tablero de 8x8 donde cada casilla es de tamaño TILE_SIZE*TILE_SIZE."""
